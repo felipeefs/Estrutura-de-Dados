@@ -11,8 +11,8 @@ int main(void){
         printf("i %d\n",i);
     }    
     printf("i depois do while %d\n",i);
-    
+
     aqui: 
         return 0; //instrução
-    
+            
 }
