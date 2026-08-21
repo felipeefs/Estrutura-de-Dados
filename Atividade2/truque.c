@@ -6,20 +6,26 @@ int entradas(){
     scanf("%d", &n);
     int vetor[n];
 
-    int i, elemento;
-    while(i<20 && (scanf("%d", &elemento) == 1)){
-        vetor[i] = elemento;
-        i++;
+    int i;
+    for(i=0; i<n; i++){ 
+        scanf("%d", &vetor[i]);
+        }
     }
+
+int somar(){
     
-    printf("%d", vetor);
-
-
 }
+
+int atualizar(){
+
+    
+}
+    
 int main(void){
+    /*
     double i = 22;
-    printf("%f\n",(int)sqrt(i));
+    printf("%f\n",(int)sqrt(i));*/
     entradas();
 
-
+    return 0;
 }
