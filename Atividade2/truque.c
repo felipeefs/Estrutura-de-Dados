@@ -12,25 +12,25 @@ void ler_entradas(int n, int vetor[n]){
     //Adicionar a entrada para quando ocasionar em uma soma e quando for uma atualização
 
 void criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
-    int i, inicio=0,fim=5;
+    int i, inicio=0, fim=raiz_r;
 
     //Zera todos os valores do vetor r, para não dar problema na memória
-    for(i=0; i<= raiz_r; i++){
+    for(i=0; i< raiz_r; i++){
         vetor_r[i] = 0;
     }
 
     //Adiciona os valores do vetor V, por meio de somas, no vetor r. Somas de 5 em 5
-    for(i=0; i<raiz_r; i++){
+    for(i=0; i<raiz_r && inicio <n; i++){
         while(inicio<fim && inicio < n){
             vetor_r[i] += vetor[inicio];
             inicio++;
         }
-        fim +=5;
+        fim +=raiz_r;
     }
-    //Prints para testar
+    /*Prints para testar
     for(i=0; i<raiz_r; i++){ 
         //printf("%d\n", vetor_r[i]);
-        }
+        }*/
 }
 
     
@@ -161,14 +161,13 @@ int main(void){
     char operacao;
 
     //Enquanto for verdade, o programa irá pedir entradas e devolverá saidas:
-    while(1){ 
-    scanf("%c %d %d", &operacao, &i, &j_x);
-
-    if(operacao == 's')
-        somar(i, n, j_x, vetor, raiz_r, vetor_r);
-    if(operacao == 'a')
-        atualizar(i, j_x, n , vetor, raiz_r, vetor_r);
-    }
+    while (scanf(" %c %d %d", &operacao, &i, &j_x) != EOF){ 
+        //scanf("%c %d %d", &operacao, &i, &j_x);
+        if(operacao == 's')
+            somar(i, n, j_x, vetor, raiz_r, vetor_r);
+        if(operacao == 'a')
+            atualizar(i, j_x, n , vetor, raiz_r, vetor_r);
+        }
     
     return 0;
 }
