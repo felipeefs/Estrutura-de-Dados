@@ -48,9 +48,9 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         }
     }
 
-    //Se apenas j é multiplo de raiz_r
-    int soma_i = i; //soma_i é o novo limite inicial para somar-se os elementos do vetor_r
+    //Se i não é multiplo de raiz_r
     if(i % raiz_r !=0 && (j+1) % raiz_r ==0){
+        int soma_i = i; //soma_i é o novo limite inicial para somar-se os elementos do vetor_r
         while(soma_i % raiz_r != 0){
             soma_i += 1;
         }
@@ -63,6 +63,25 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
             printf("%d\n", vetor_r[k]);
         }
         for(k=i; k<=soma_i; k++){
+            soma += vetor[k];
+        }
+    }
+
+    //Se j não é multiplo de raiz_r
+    if(i % raiz_r ==0 && (j+1) % raiz_r !=0){
+        int sub_j = j; //soma_i é o novo limite inicial para somar-se os elementos do vetor_r
+        while(sub_j % raiz_r != 0){
+            sub_j -= 1;
+        }
+
+        ind_inicial = i / raiz_r;
+        ind_final = ((sub_j+1) / raiz_r) -1;
+        for(k=ind_inicial; k<=ind_final; k++){
+            soma += vetor_r[k];
+            printf("%d\n", vetor_r[k]);
+        }
+
+        for(k=sub_j; k<=j; k++){
             soma += vetor[k];
         }
     }
