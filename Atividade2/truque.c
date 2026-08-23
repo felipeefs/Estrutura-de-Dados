@@ -40,9 +40,9 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
 
     //Se ambos forem multiplos pode-se somar pelo vetor_r diretamente
     if(i % raiz_r == 0 && (j+1) % raiz_r ==0){
-        ind_final = i % raiz_r;
-        ind_final = ((j+1) % raiz_r) -1;
-        for(k=ind_inicial; k<ind_final; k++){
+        ind_inicial = i / raiz_r;
+        ind_final = ((j+1) / raiz_r) -1;
+        for(k=ind_inicial; k<=ind_final; k++){
             soma += vetor_r[k];
             printf("%d\n", vetor_r[k]);
         }
