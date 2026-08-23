@@ -25,7 +25,7 @@ int criar_r(int n, int vetor[n]){
 
     //Adiciona os valores do vetor V, por meio de somas, no vetor r
     for(i=0; i<raiz_r; i++){
-        while(inicio<fim){
+        while(inicio<fim && inicio < n){
             vetor_r[i] += vetor[inicio];
             inicio++;
         }
