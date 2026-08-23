@@ -11,8 +11,8 @@ void ler_entradas(int n, int vetor[n]){
     
     //Adicionar a entrada para quando ocasionar em uma soma e quando for uma atualização
 
-int criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
-    int i, inicio=0,fim=5, soma=0;
+void criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
+    int i, inicio=0,fim=5;
 
     //Zera todos os valores do vetor r, para não dar problema na memória
     for(i=0; i<= raiz_r; i++){
@@ -29,14 +29,14 @@ int criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     }
     //Prints para testar
     for(i=0; i<raiz_r; i++){ 
-        printf("%d\n", vetor_r[i]);
+        //printf("%d\n", vetor_r[i]);
         }
 }
 
     
-int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
+void somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     //Existem 4 casos; i e j multiplos do vetor_r; i multiplo e j não; j multiplo e i não; nenhum dos dois multiplos
-    int soma = 0, k, l ,ind_inicial, ind_final;
+    int soma = 0, k,ind_inicial, ind_final;
 
     //Se ambos forem multiplos pode-se somar pelo vetor_r diretamente
     if(i % raiz_r == 0 && (j+1) % raiz_r ==0){
@@ -44,7 +44,7 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         ind_final = ((j+1) / raiz_r) -1;
         for(k=ind_inicial; k<=ind_final; k++){
             soma += vetor_r[k];
-            printf("%d\n", vetor_r[k]);
+            //printf("%d\n", vetor_r[k]);
         }
     }
 
@@ -54,15 +54,15 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         while(soma_i % raiz_r != 0){
             soma_i += 1;
         }
-        printf("A soma é: %d\n", soma_i);
+       // printf("A soma é: %d\n", soma_i);
 
         ind_inicial = soma_i / raiz_r;
         ind_final = ((j+1) / raiz_r) -1;
         for(k=ind_inicial; k<=ind_final; k++){
             soma += vetor_r[k];
-            printf("%d\n", vetor_r[k]);
+            //printf("%d\n", vetor_r[k]);
         }
-        for(k=i; k<=soma_i; k++){
+        for(k=i; k<soma_i; k++){
             soma += vetor[k];
         }
     }
@@ -78,7 +78,7 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         ind_final = ((sub_j+1) / raiz_r) -1;
         for(k=ind_inicial; k<=ind_final; k++){
             soma += vetor_r[k];
-            printf("%d\n", vetor_r[k]);
+            //printf("%d\n", vetor_r[k]);
         }
 
         for(k=sub_j; k<=j; k++){
@@ -86,7 +86,7 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         }
     }
 
-    //i e j não são múltiplos de raiz_r
+    //i e j não são múltiplos de raiz_r:
     else if(i % raiz_r != 0 && (j+1) % raiz_r !=0){
         int soma_i = i; //soma_i é o novo limite final para somar-se os elementos do vetor_r
         while(soma_i % raiz_r != 0){
@@ -97,13 +97,13 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         while(sub_j % raiz_r != 0){
             sub_j -= 1;
         }
-        printf("%d\n", sub_j);
+        //printf("%d\n", sub_j);
 
         ind_inicial = soma_i / raiz_r;
         ind_final = ((sub_j+1) / raiz_r) -1;
         for(k=ind_inicial; k<=ind_final; k++){
             soma += vetor_r[k];
-            printf("%d\n", vetor_r[k]);
+            //printf("%d\n", vetor_r[k]);
         }
 
         for(k=i; k<=soma_i; k++){
@@ -114,23 +114,34 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
 
         for(k=sub_j; k<=j; k++){
             soma += vetor[k];
-            printf("%d\n", vetor[k]);
-            printf("k: %d\n", k);
+            //printf("%d\n", vetor[k]);
+            //printf("k: %d\n", k);
         }
 
         //Testa se os limites são iguais e subtriar, porque foi somado suas vezes
         if(soma_i == sub_j)
             soma -= vetor[soma_i];
     }
-
     printf("%d\n", soma);
-
-    
 }
 
-int atualizar(){
+void atualizar(int i, int x, int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
+    //Descobrir onde está o i em r, e subtrair vetor[i] e somar x
 
-    
+    int indice_r = i / raiz_r; //Ao transformar em int, descobre-se em que posição ele está em vetor_r
+    vetor_r[indice_r] += (x - vetor[i]);
+    vetor[i] = x;
+
+    /*Testes
+    int b;
+    for(b=0; b<raiz_r; b++){ 
+        printf("%d\n", vetor_r[b]);
+        }
+    for(b =0; b<n; b++){
+        printf("%d = %d\n", b, vetor[b]);
+    }
+
+    printf("indice : %d\n", indice_r); */
 }
     
 int main(void){
@@ -148,12 +159,16 @@ int main(void){
     //Operações de soma e de atualização
     int i ,j_x;
     char operacao;
-    scanf("%s %d %d", &operacao, &i, &j_x);
+
+    //Enquanto for verdade, o programa irá pedir entradas e devolverá saidas:
+    while(1){ 
+    scanf("%c %d %d", &operacao, &i, &j_x);
 
     if(operacao == 's')
         somar(i, n, j_x, vetor, raiz_r, vetor_r);
-    /*if(operacao == 'a')
-        atualizar();
-    */
+    if(operacao == 'a')
+        atualizar(i, j_x, n , vetor, raiz_r, vetor_r);
+    }
+    
     return 0;
 }
