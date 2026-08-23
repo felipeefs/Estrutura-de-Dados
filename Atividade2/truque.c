@@ -36,7 +36,7 @@ int criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     
 int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     //Existem 4 casos; i e j multiplos do vetor_r; i multiplo e j não; j multiplo e i não; nenhum dos dois multiplos
-    int soma = 0, k ,ind_inicial, ind_final;
+    int soma = 0, k, l ,ind_inicial, ind_final;
 
     //Se ambos forem multiplos pode-se somar pelo vetor_r diretamente
     if(i % raiz_r == 0 && (j+1) % raiz_r ==0){
@@ -49,8 +49,8 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     }
 
     //Se i não é multiplo de raiz_r
-    if(i % raiz_r !=0 && (j+1) % raiz_r ==0){
-        int soma_i = i; //soma_i é o novo limite inicial para somar-se os elementos do vetor_r
+    else if(i % raiz_r !=0 && (j+1) % raiz_r ==0){
+        int soma_i = i; //soma_i é o novo limite final para somar-se os elementos do vetor_r
         while(soma_i % raiz_r != 0){
             soma_i += 1;
         }
@@ -68,8 +68,8 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     }
 
     //Se j não é multiplo de raiz_r
-    if(i % raiz_r ==0 && (j+1) % raiz_r !=0){
-        int sub_j = j; //soma_i é o novo limite inicial para somar-se os elementos do vetor_r
+    else if(i % raiz_r ==0 && (j+1) % raiz_r !=0){
+        int sub_j = j; //sub_j é o novo limite inicial para somar-se os elementos do vetor_r
         while(sub_j % raiz_r != 0){
             sub_j -= 1;
         }
@@ -84,6 +84,43 @@ int somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         for(k=sub_j; k<=j; k++){
             soma += vetor[k];
         }
+    }
+
+    //i e j não são múltiplos de raiz_r
+    else if(i % raiz_r != 0 && (j+1) % raiz_r !=0){
+        int soma_i = i; //soma_i é o novo limite final para somar-se os elementos do vetor_r
+        while(soma_i % raiz_r != 0){
+            soma_i += 1;
+        }
+        
+        int sub_j = j; //sub_j é o novo limite inicial para somar-se os elementos do vetor_r
+        while(sub_j % raiz_r != 0){
+            sub_j -= 1;
+        }
+        printf("%d\n", sub_j);
+
+        ind_inicial = soma_i / raiz_r;
+        ind_final = ((sub_j+1) / raiz_r) -1;
+        for(k=ind_inicial; k<=ind_final; k++){
+            soma += vetor_r[k];
+            printf("%d\n", vetor_r[k]);
+        }
+
+        for(k=i; k<=soma_i; k++){
+            soma += vetor[k];
+            //printf("%d\n", vetor[k]);
+            //printf("k: %d\n", k);
+        }
+
+        for(k=sub_j; k<=j; k++){
+            soma += vetor[k];
+            printf("%d\n", vetor[k]);
+            printf("k: %d\n", k);
+        }
+
+        //Testa se os limites são iguais e subtriar, porque foi somado suas vezes
+        if(soma_i == sub_j)
+            soma -= vetor[soma_i];
     }
 
     printf("%d\n", soma);
