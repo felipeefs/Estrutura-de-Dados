@@ -35,94 +35,37 @@ void criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
 
     
 void somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
-    //Existem 4 casos; i e j multiplos do vetor_r; i multiplo e j não; j multiplo e i não; nenhum dos dois multiplos
-    int soma = 0, k,ind_inicial, ind_final;
+    //Existem 2 casos; ou i e j estão no mesmo bloco, ou estão em blocos diferentes 
+    int soma = 0;
+    int bloco_i = i / raiz_r;
+    int bloco_j = j / raiz_r;
 
-    //Se ambos forem multiplos pode-se somar pelo vetor_r diretamente
-    if(i % raiz_r == 0 && (j+1) % raiz_r ==0){
-        ind_inicial = i / raiz_r;
-        ind_final = ((j+1) / raiz_r) -1;
-        for(k=ind_inicial; k<=ind_final; k++){
-            soma += vetor_r[k];
-            //printf("%d\n", vetor_r[k]);
-        }
-    }
-
-    //Se i não é multiplo de raiz_r
-    else if(i % raiz_r !=0 && (j+1) % raiz_r ==0){
-        int soma_i = i; //soma_i é o novo limite final para somar-se os elementos do vetor_r
-        while(soma_i % raiz_r != 0){
-            soma_i += 1;
-        }
-       // printf("A soma é: %d\n", soma_i);
-
-        ind_inicial = soma_i / raiz_r;
-        ind_final = ((j+1) / raiz_r) -1;
-        for(k=ind_inicial; k<=ind_final; k++){
-            soma += vetor_r[k];
-            //printf("%d\n", vetor_r[k]);
-        }
-        for(k=i; k<soma_i; k++){
+    //Quando os limites ocasionam no mesmo bloco; em que pode ser que não seja o bloco inteiro
+    if(bloco_i == bloco_j){ 
+        for(int k=0; k<=j; k++){ //Soma direto sem se preucupar com pontas foras do vetor
             soma += vetor[k];
         }
     }
 
-    //Se j não é multiplo de raiz_r
-    else if(i % raiz_r ==0 && (j+1) % raiz_r !=0){
-        int sub_j = j; //sub_j é o novo limite inicial para somar-se os elementos do vetor_r
-        while(sub_j % raiz_r != 0){
-            sub_j -= 1;
-        }
-
-        ind_inicial = i / raiz_r;
-        ind_final = ((sub_j+1) / raiz_r) -1;
-        for(k=ind_inicial; k<=ind_final; k++){
-            soma += vetor_r[k];
-            //printf("%d\n", vetor_r[k]);
-        }
-
-        for(k=sub_j; k<=j; k++){
+    else{
+        //Elementos antes dos blocos (caso não existam a condição do for nem faz a soma)
+        for(int k=i; k < (bloco_i + 1) * raiz_r; k++){
             soma += vetor[k];
         }
-    }
 
-    //i e j não são múltiplos de raiz_r:
-    else if(i % raiz_r != 0 && (j+1) % raiz_r !=0){
-        int soma_i = i; //soma_i é o novo limite final para somar-se os elementos do vetor_r
-        while(soma_i % raiz_r != 0){
-            soma_i += 1;
-        }
-        
-        int sub_j = j; //sub_j é o novo limite inicial para somar-se os elementos do vetor_r
-        while(sub_j % raiz_r != 0){
-            sub_j -= 1;
-        }
-        //printf("%d\n", sub_j);
-
-        ind_inicial = soma_i / raiz_r;
-        ind_final = ((sub_j+1) / raiz_r) -1;
-        for(k=ind_inicial; k<=ind_final; k++){
-            soma += vetor_r[k];
-            //printf("%d\n", vetor_r[k]);
+        //Elementos que estão nos blocos do vetor_r
+        for(int k = bloco_i+1; k< bloco_j; k++){
+            soma+= vetor_r[k];
         }
 
-        for(k=i; k<=soma_i; k++){
+        //Elementos que passam dos blocos
+        for(int k = bloco_j * raiz_r; k <=j; k++){
             soma += vetor[k];
-            //printf("%d\n", vetor[k]);
-            //printf("k: %d\n", k);
         }
 
-        for(k=sub_j; k<=j; k++){
-            soma += vetor[k];
-            //printf("%d\n", vetor[k]);
-            //printf("k: %d\n", k);
-        }
-
-        //Testa se os limites são iguais e subtriar, porque foi somado suas vezes
-        if(soma_i == sub_j)
-            soma -= vetor[soma_i];
     }
     printf("%d\n", soma);
+
 }
 
 void atualizar(int i, int x, int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
