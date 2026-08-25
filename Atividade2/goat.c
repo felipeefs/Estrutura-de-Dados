@@ -2,8 +2,20 @@
 #include <string.h>
 #include <math.h>
 
-char comeca_vogal(){
+char comeca_vogal(char frase[], int posicao_atual){
     //Adiciona "ma" ao final da palavra
+    int proximo_espaco;
+    for(int i = posicao_atual; posicao_atual < strlen(frase); i++){
+        if(frase[i] == ' '){ 
+            proximo_espaco = i;
+            break;
+        }
+
+    
+    }
+    
+    printf("O espaço está em: %d\n", proximo_espaco);
+
 
 }
 
@@ -26,13 +38,17 @@ int main(){
     printf("%d\n", strlen(frase));
 
     //Loop que le a frase e até que ache um espaço faz operações na palavra, quando acha um espaço da um break para recomeçar loop?
-    for(int i = 0; frase[i] != " " && i < strlen(frase); i++){
-        if(frase[0] == 'a' || frase[0] == 'e' || frase[0] == 'i' || frase[0] == 'o' || frase[0] == 'u' || frase[0] == 'A' || frase[0] == 'E' || frase[0] == 'O' || frase[0] == 'I' || frase[0] == 'U')
-            comeca_vogal(frase);
-        
+    int posicao_atual = 0;
+    for(int i = 0; frase[i] != ' ' && i < strlen(frase); i++){
+        printf("A posição é: %d\n", posicao_atual);
 
+        if(frase[0] == 'a' || frase[0] == 'e' || frase[0] == 'i' || frase[0] == 'o' || frase[0] == 'u' || frase[0] == 'A' || frase[0] == 'E' || frase[0] == 'O' || frase[0] == 'I' || frase[0] == 'U')
+            comeca_vogal(frase, posicao_atual);
+            
+        posicao_atual += 1;
 
     }
+
 
 }
 
