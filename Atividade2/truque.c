@@ -42,7 +42,7 @@ void somar(int i ,int n, int j, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
 
     //Quando os limites ocasionam no mesmo bloco; em que pode ser que não seja o bloco inteiro
     if(bloco_i == bloco_j){ 
-        for(int k=0; k<=j; k++){ //Soma direto sem se preucupar com pontas foras do vetor
+        for(int k=i; k<=j; k++){ //Soma direto sem se preucupar com pontas foras do vetor
             soma += vetor[k];
         }
     }
@@ -105,7 +105,6 @@ int main(void){
 
     //Enquanto for verdade, o programa irá pedir entradas e devolverá saidas:
     while (scanf(" %c %d %d", &operacao, &i, &j_x) != EOF){ 
-        //scanf("%c %d %d", &operacao, &i, &j_x);
         if(operacao == 's')
             somar(i, n, j_x, vetor, raiz_r, vetor_r);
         if(operacao == 'a')
