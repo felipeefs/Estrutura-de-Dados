@@ -1,21 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#define max_palavras 1000
+#define max_caracteres 100
 
-char comeca_vogal(char frase[], int posicao_atual){
-    //Adiciona "ma" ao final da palavra
-    int proximo_espaco;
-    for(int i = posicao_atual; posicao_atual < strlen(frase); i++){
-        if(frase[i] == ' '){ 
-            proximo_espaco = i;
-            break;
-        }
-
-    
-    }
-    
-    printf("O espaço está em: %d\n", proximo_espaco);
-
+char comeca_vogal(char frase_total[], int posicao_atual){
 
 }
 
@@ -23,31 +12,37 @@ char comeca_vogal(char frase[], int posicao_atual){
 
 
 int main(){
-    // Ler a frase, ver o tamanho dela e criar um vetor para a mesma
-    char frase[200000]; //Pelos cálculos por bytes, esse é o tamanho máximo que o vetor poderá ter no exercício
-    scanf("%[^\n]", frase); //Lê até a quebra de linha ao digitar
+    // Ler a frase_total, ver o tamanho dela e criar um vetor para a mesma
+    char frase_total[200000]; 
+    char frase[max_palavras][max_caracteres];
+    int num_palavras = 0;
 
-    /*  
-    printf("%s\n", frase);
-    for(int i = 0; frase[i] != '\0'; i++)
-        printf("%c\n", frase[i]); 
-    */
-    for(int i = 0; i < strlen(frase); i++)
-        printf("%c\n", frase[i]); 
+    scanf("%[^\n]", frase_total); //Lê até a quebra de linha ao digitar
 
-    printf("%d\n", strlen(frase));
+    //Cria uma matriz frase, em que cada elemento é uma palavra
+    char *palavra = strtok(frase_total, " ");
+    printf("%c\n", *palavra);
+    while(palavra != NULL && num_palavras < max_palavras){ 
+        int j;
+        for(j=0; palavra[j] != '\0'; j++){
+            frase[num_palavras][j] = palavra[j];
+        }
+        frase[num_palavras][j] = '\0';
+        num_palavras++;
+        palavra = strtok(NULL, " ");
+    }
 
-    //Loop que le a frase e até que ache um espaço faz operações na palavra, quando acha um espaço da um break para recomeçar loop?
-    int posicao_atual = 0;
-    for(int i = 0; frase[i] != ' ' && i < strlen(frase); i++){
-        printf("A posição é: %d\n", posicao_atual);
+    //Analisa palavra por palavra e adiciona as regras de Goat Latin
+    for (int i = 0; i < num_palavras; i++) {
+        printf("frase[%d] = %s\n", i, frase[i]);
+        
 
-        if(frase[0] == 'a' || frase[0] == 'e' || frase[0] == 'i' || frase[0] == 'o' || frase[0] == 'u' || frase[0] == 'A' || frase[0] == 'E' || frase[0] == 'O' || frase[0] == 'I' || frase[0] == 'U')
-            comeca_vogal(frase, posicao_atual);
-            
-        posicao_atual += 1;
 
     }
+    
+    return 0;
+
+
 
 
 }
