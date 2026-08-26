@@ -5,6 +5,7 @@
 #define max_caracteres 100
 
 char comeca_vogal(int i, char frase[][max_caracteres]){
+    //Ao achar uma palavra que começa com vogal, percorre toda ela até achar a posição final para adicionar "ma"
     int posicao_final = 0;
     for(int j = 0; frase[i][j] != '\0'; j++){
         posicao_final++;
@@ -12,11 +13,24 @@ char comeca_vogal(int i, char frase[][max_caracteres]){
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
     frase[i][posicao_final + 2] = '\0';
-    printf("%d\n", posicao_final);
-    
-
 }
 
+char comeca_consoante(int i, char frase[][max_caracteres]){
+    int posicao_final = 0;
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        posicao_final++;
+    }
+
+    frase[i][posicao_final] = frase[i][0];
+
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        frase[i][j] = frase[i][j+1];
+    }
+
+    frase[i][posicao_final] = 'm';
+    frase[i][posicao_final + 1] = 'a';
+    frase[i][posicao_final + 2] = '\0';
+}
 
 
 
@@ -46,6 +60,8 @@ int main(){
         
         if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
             comeca_vogal(i, frase);
+        else
+            comeca_consoante(i, frase);
 
         printf("frase[%d] = %s\n", i, frase[i]);
 
@@ -54,15 +70,7 @@ int main(){
                 printf("A letra da palavra: %c\n", frase[i][j]);
 
             }
-
-
-
     }
-    
     return 0;
-
-
-
-
 }
 
