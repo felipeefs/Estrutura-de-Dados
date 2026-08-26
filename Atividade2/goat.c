@@ -4,7 +4,16 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-char comeca_vogal(char frase_total[], int posicao_atual){
+char comeca_vogal(int i, char frase[][max_caracteres]){
+    int posicao_final = 0;
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        posicao_final++;
+    }
+    frase[i][posicao_final] = 'm';
+    frase[i][posicao_final + 1] = 'a';
+    frase[i][posicao_final + 2] = '\0';
+    printf("%d\n", posicao_final);
+    
 
 }
 
@@ -21,7 +30,6 @@ int main(){
 
     //Cria uma matriz frase, em que cada elemento é uma palavra
     char *palavra = strtok(frase_total, " ");
-    printf("%c\n", *palavra);
     while(palavra != NULL && num_palavras < max_palavras){ 
         int j;
         for(j=0; palavra[j] != '\0'; j++){
@@ -36,6 +44,17 @@ int main(){
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
         
+        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
+            comeca_vogal(i, frase);
+
+        printf("frase[%d] = %s\n", i, frase[i]);
+
+
+            for(int j =0; frase[i][j] != '\0'; j ++){
+                printf("A letra da palavra: %c\n", frase[i][j]);
+
+            }
+
 
 
     }
