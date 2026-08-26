@@ -5,6 +5,7 @@
 #define max_caracteres 100
 
 int achar_posicao_final(int i, char frase[][max_caracteres]){ 
+    //Acha a posição final de uma palavra (seu tamanho), antes de passar por modificações
     int posicao_final = 0;
     for(int j = 0; frase[i][j] != '\0'; j++){
         posicao_final++;
@@ -14,26 +15,16 @@ int achar_posicao_final(int i, char frase[][max_caracteres]){
 }
 
 
-void comeca_vogal(int i, char frase[][max_caracteres]){
+void comeca_vogal(int i, char frase[][max_caracteres], int posicao_final){
     //Ao achar uma palavra que começa com vogal, percorre toda ela até achar a posição final para adicionar "ma"
-    int posicao_final = 0;
-    for(int j = 0; frase[i][j] != '\0'; j++){
-        posicao_final++;
-    }
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
     frase[i][posicao_final + 2] = '\0';
 
-    return posicao_final;
 }
 
-void comeca_consoante(int i, char frase[][max_caracteres]){
+void comeca_consoante(int i, char frase[][max_caracteres], int posicao_final){
     //Adiciona a primeira letra ao final da palavra, depois retira a primeira letra do começo através de um loop. Ao final adiciona o "ma"
-    int posicao_final = 0;
-    for(int j = 0; frase[i][j] != '\0'; j++){
-        posicao_final++;
-    }
-
     frase[i][posicao_final] = frase[i][0];
 
     for(int j = 0; frase[i][j] != '\0'; j++){
@@ -46,12 +37,8 @@ void comeca_consoante(int i, char frase[][max_caracteres]){
 
 }
 
-void adicionar_sufixo(int i, char frase[][max_caracteres]){
+void adicionar_sufixo(int i, char frase[][max_caracteres], int posicao_final){
     //Descobre qual é a posição final, e a posição final é a quantidade de caracteres da palavra - 1. Logo o sufixo 'a' terá a mesma quantidade de 'a' que a (posição final - 1)
-    int posicao_final = 0;
-    for(int j = 0; frase[i][j] != '\0'; j++){
-        posicao_final++;
-    }
 
     for(int j = posicao_final; j < (posicao_final*2); j++){ 
         frase[i][j] = 'a';
@@ -93,11 +80,11 @@ int main(){
         printf("frase[%d] = %s\n", i, frase[i]);
         
         if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
-            comeca_vogal(i, frase);
+            comeca_vogal(i, frase, achar_posicao_final(i, frase));
         else
-            comeca_consoante(i, frase);
+            comeca_consoante(i, frase, achar_posicao_final(i, frase));
 
-        adicionar_sufixo(i, frase);
+        adicionar_sufixo(i, frase, achar_posicao_final(i, frase));
 
         
         printf("frase[%d] = %s\n", i, frase[i]);
