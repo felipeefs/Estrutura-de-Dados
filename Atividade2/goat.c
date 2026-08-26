@@ -20,7 +20,6 @@ void comeca_vogal(int i, char frase[][max_caracteres], int posicao_final){
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
     frase[i][posicao_final + 2] = '\0';
-
 }
 
 void comeca_consoante(int i, char frase[][max_caracteres], int posicao_final){
@@ -48,10 +47,6 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int posicao_final){
     
     printf("A posição final agora é: %d\n", posicao_final);
     
-
-
-
-
 }
 
 
@@ -78,13 +73,15 @@ int main(){
     //Analisa palavra por palavra e adiciona as regras de Goat Latin
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
-        
-        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
-            comeca_vogal(i, frase, achar_posicao_final(i, frase));
-        else
-            comeca_consoante(i, frase, achar_posicao_final(i, frase));
 
-        adicionar_sufixo(i, frase, achar_posicao_final(i, frase));
+        int posicao_final = achar_posicao_final(i, frase);
+
+        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
+            comeca_vogal(i, frase, posicao_final);
+        else
+            comeca_consoante(i, frase, posicao_final);
+
+        adicionar_sufixo(i, frase, posicao_final);
 
         
         printf("frase[%d] = %s\n", i, frase[i]);
