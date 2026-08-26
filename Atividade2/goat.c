@@ -4,7 +4,17 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-char comeca_vogal(int i, char frase[][max_caracteres]){
+int achar_posicao_final(int i, char frase[][max_caracteres]){ 
+    int posicao_final = 0;
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        posicao_final++;
+    }
+
+    return posicao_final;
+}
+
+
+void comeca_vogal(int i, char frase[][max_caracteres]){
     //Ao achar uma palavra que começa com vogal, percorre toda ela até achar a posição final para adicionar "ma"
     int posicao_final = 0;
     for(int j = 0; frase[i][j] != '\0'; j++){
@@ -13,9 +23,12 @@ char comeca_vogal(int i, char frase[][max_caracteres]){
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
     frase[i][posicao_final + 2] = '\0';
+
+    return posicao_final;
 }
 
-char comeca_consoante(int i, char frase[][max_caracteres]){
+void comeca_consoante(int i, char frase[][max_caracteres]){
+    //Adiciona a primeira letra ao final da palavra, depois retira a primeira letra do começo através de um loop. Ao final adiciona o "ma"
     int posicao_final = 0;
     for(int j = 0; frase[i][j] != '\0'; j++){
         posicao_final++;
@@ -30,8 +43,29 @@ char comeca_consoante(int i, char frase[][max_caracteres]){
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
     frase[i][posicao_final + 2] = '\0';
+
 }
 
+void adicionar_sufixo(int i, char frase[][max_caracteres]){
+    //Descobre qual é a posição final, e a posição final é a quantidade de caracteres da palavra - 1. Logo o sufixo 'a' terá a mesma quantidade de 'a' que a (posição final - 1)
+    int posicao_final = 0;
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        posicao_final++;
+    }
+
+    for(int j = posicao_final; j < (posicao_final*2); j++){ 
+        frase[i][j] = 'a';
+    }
+
+    frase[i][(posicao_final*2) + 1] = '\0';
+    
+    printf("A posição final agora é: %d\n", posicao_final);
+    
+
+
+
+
+}
 
 
 int main(){
@@ -63,13 +97,15 @@ int main(){
         else
             comeca_consoante(i, frase);
 
+        adicionar_sufixo(i, frase);
+
+        
         printf("frase[%d] = %s\n", i, frase[i]);
 
+        for(int j =0; frase[i][j] != '\0'; j ++){
+            printf("A letra da palavra: %c\n", frase[i][j]);
+        }
 
-            for(int j =0; frase[i][j] != '\0'; j ++){
-                printf("A letra da palavra: %c\n", frase[i][j]);
-
-            }
     }
     return 0;
 }
