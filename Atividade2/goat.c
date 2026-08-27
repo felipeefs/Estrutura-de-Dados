@@ -36,16 +36,23 @@ void comeca_consoante(int i, char frase[][max_caracteres], int posicao_final){
 
 }
 
-void adicionar_sufixo(int i, char frase[][max_caracteres], int posicao_final){
+void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
     //Descobre qual é a posição final, e a posição final é a quantidade de caracteres da palavra - 1. Logo o sufixo 'a' terá a mesma quantidade de 'a' que a (posição final - 1)
+    int posicao_final = achar_posicao_final(i, frase);
 
-    for(int j = posicao_final; j < (posicao_final*2); j++){ 
+    printf("O numero de sufixo é: %d\n", n_sufixo);
+    printf("A posicao final é: %d\n", posicao_final);
+
+    for(int j = posicao_final ; j < n_sufixo + posicao_final ; j++){ 
         frase[i][j] = 'a';
+        printf("O j é %d\n", j);
     }
+    printf("A posicao final é: %d\n", posicao_final);
 
-    frase[i][(posicao_final*2) + 1] = '\0';
+
+    frase[i][(posicao_final + n_sufixo) + 1] = '\0';
     
-    printf("A posição final agora é: %d\n", posicao_final);
+    //printf("A posição final agora é: %d\n", posicao_final);
     
 }
 
@@ -76,8 +83,11 @@ int main(){
 
         int posicao_final = achar_posicao_final(i, frase);
 
-        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U')
+        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U'){
             comeca_vogal(i, frase, posicao_final);
+            printf("frase[%d] = %s\n", i, frase[i]);
+        }
+
         else
             comeca_consoante(i, frase, posicao_final);
 
@@ -86,9 +96,11 @@ int main(){
         
         printf("frase[%d] = %s\n", i, frase[i]);
 
+        /* 
         for(int j =0; frase[i][j] != '\0'; j ++){
             printf("A letra da palavra: %c\n", frase[i][j]);
         }
+        */
 
     }
     return 0;
