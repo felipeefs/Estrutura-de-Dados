@@ -4,16 +4,26 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
+
+void remover_especial(char frase[][max_caracteres], int i, int j){
+    //Sobrescreve a palavra removendo o caractere especial
+    int posicao_final = achar_posicao_final(i, frase);
+    for(int j = 0; frase[i][j] != '\0'; j++){
+        frase[i][j] = frase[i][j+1];
+    }
+
+
+
+}
+
 int achar_posicao_final(int i, char frase[][max_caracteres]){ 
     //Acha a posição final de uma palavra (seu tamanho), antes de passar por modificações
     int posicao_final = 0;
     for(int j = 0; frase[i][j] != '\0'; j++){
         posicao_final++;
     }
-
     return posicao_final;
 }
-
 
 void comeca_vogal(int i, char frase[][max_caracteres], int posicao_final){
     //Ao achar uma palavra que começa com vogal, percorre toda ela até achar a posição final para adicionar "ma"
@@ -37,11 +47,8 @@ void comeca_consoante(int i, char frase[][max_caracteres], int posicao_final){
 }
 
 void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
-    //Descobre qual é a posição final, e a posição final é a quantidade de caracteres da palavra - 1. Logo o sufixo 'a' terá a mesma quantidade de 'a' que a (posição final - 1)
+    //Descobre qual é a posição final atual após adicionar o sufixo "ma", e a posicao_final inicial se torna o n_sufixo que será adicionado de sufixos "aaaa"
     int posicao_final = achar_posicao_final(i, frase);
-
-    printf("O numero de sufixo é: %d\n", n_sufixo);
-    printf("A posicao final é: %d\n", posicao_final);
 
     for(int j = posicao_final ; j < n_sufixo + posicao_final ; j++){ 
         frase[i][j] = 'a';
@@ -49,11 +56,9 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
     }
     printf("A posicao final é: %d\n", posicao_final);
 
-
     frase[i][(posicao_final + n_sufixo) + 1] = '\0';
     
     //printf("A posição final agora é: %d\n", posicao_final);
-    
 }
 
 
@@ -80,6 +85,11 @@ int main(){
     //Analisa palavra por palavra e adiciona as regras de Goat Latin
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
+        
+        for(int j =0; frase[i][j] != '\0'; j ++){
+            if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z')))
+                remover_especial(frase, i, j);
+        }
 
         int posicao_final = achar_posicao_final(i, frase);
 
