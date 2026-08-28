@@ -4,23 +4,26 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-
-void remover_especial(char frase[][max_caracteres], int i, int j){
+void remover_especial(char frase[][max_caracteres], int i){
     //Sobrescreve a palavra removendo o caractere especial
     //int posicao_final = achar_posicao_final(i, frase);
     /* 
     if(frase[i][j+1] == '\0'){
         frase[i][j] = frase[i][j+1];
     } */
-    printf("O j está em: %d\n", j);
-    for(j; frase[i][j] != '\0'; j++){
-        printf("O j está em loop: %d\n", j);
-        frase[i][j] = frase[i][j+1];
+    for(int k =0; frase[i][k] != '\0'; k++){
+        if(!((frase[i][k] >= 'a' && frase[i][k] <= 'z') ||(frase[i][k] >= 'A' && frase[i][k] <= 'Z'))){
+        printf("O j está em: %d\n", k);
+        
+        for(int j = k; j < strlen(frase[i]); j++){
+            printf("O j está em loop: %d\n", j);
+            frase[i][j] = frase[i][j+1];
+            }
+            k --; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
+            printf("frase após tirar especial: %s\n", frase[i]);
+        }
+
     }
-    
-
-
-
 }
 
 int achar_posicao_final(int i, char frase[][max_caracteres]){ 
@@ -93,11 +96,8 @@ int main(){
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
         
-        for(int j =0; frase[i][j] != '\0'; j ++){
-            if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z')))
-                remover_especial(frase, i, j);
-        }
-
+        remover_especial(frase, i);
+        
         int posicao_final = achar_posicao_final(i, frase);
 
         if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U'){
@@ -122,4 +122,3 @@ int main(){
     }
     return 0;
 }
-
