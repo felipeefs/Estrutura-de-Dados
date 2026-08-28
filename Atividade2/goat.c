@@ -7,10 +7,17 @@
 
 void remover_especial(char frase[][max_caracteres], int i, int j){
     //Sobrescreve a palavra removendo o caractere especial
-    int posicao_final = achar_posicao_final(i, frase);
-    for(int j = 0; frase[i][j] != '\0'; j++){
+    //int posicao_final = achar_posicao_final(i, frase);
+    /* 
+    if(frase[i][j+1] == '\0'){
+        frase[i][j] = frase[i][j+1];
+    } */
+    printf("O j está em: %d\n", j);
+    for(j; frase[i][j] != '\0'; j++){
+        printf("O j está em loop: %d\n", j);
         frase[i][j] = frase[i][j+1];
     }
+    
 
 
 
@@ -52,9 +59,9 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
 
     for(int j = posicao_final ; j < n_sufixo + posicao_final ; j++){ 
         frase[i][j] = 'a';
-        printf("O j é %d\n", j);
+        //printf("O j é %d\n", j);
     }
-    printf("A posicao final é: %d\n", posicao_final);
+    //printf("A posicao final é: %d\n", posicao_final);
 
     frase[i][(posicao_final + n_sufixo) + 1] = '\0';
     
