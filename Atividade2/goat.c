@@ -4,23 +4,35 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-void remover_especial(char frase[][max_caracteres], int i){
+void remover_especiais(char frase[][max_caracteres], int i){
     //Sobrescreve a palavra removendo o caractere especial
-    //int posicao_final = achar_posicao_final(i, frase);
-    /* 
-    if(frase[i][j+1] == '\0'){
-        frase[i][j] = frase[i][j+1];
-    } */
-    for(int k =0; frase[i][k] != '\0'; k++){
-        if(!((frase[i][k] >= 'a' && frase[i][k] <= 'z') ||(frase[i][k] >= 'A' && frase[i][k] <= 'Z'))){
-        printf("O j está em: %d\n", k);
+    for(int j =0; frase[i][j] != '\0'; j++){
+        if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
+        printf("O j está em: %d\n", j);
         
-        for(int j = k; j < strlen(frase[i]); j++){
-            printf("O j está em loop: %d\n", j);
-            frase[i][j] = frase[i][j+1];
+        for(int k = j; k < strlen(frase[i]); k++){
+            printf("O j está em loop: %d\n", k);
+            frase[i][k] = frase[i][k+1];
             }
-            k --; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
+            j--; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
             printf("frase após tirar especial: %s\n", frase[i]);
+        }
+
+        else if(frase[i][j] >= '0' && frase[i][j] <= '9'){
+            char soma[5];
+
+            if(frase[i][j+1] >= '0' && frase[i][j+1] <= '9'){
+                int c = 0;
+                while(c < 5){
+
+                }
+            }
+
+            for(int k = j; k < strlen(frase[i]); k++){
+                printf("O j está em loop: %d\n", k);
+                frase[i][k] = frase[i][k+1];
+            }
+            j--; 
         }
 
     }
@@ -96,7 +108,7 @@ int main(){
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
         
-        remover_especial(frase, i);
+        remover_especiais(frase, i);
         
         int posicao_final = achar_posicao_final(i, frase);
 
