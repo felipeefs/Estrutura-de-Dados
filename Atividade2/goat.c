@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdlib.h>
 #define max_palavras 1000
 #define max_caracteres 100
 
 void remover_especiais(char frase[][max_caracteres], int i){
-    //Sobrescreve a palavra removendo o caractere especial
+    //Para a remoção de caracteres especiais, sobrescreve-los:
+    int soma = 0;
     for(int j =0; frase[i][j] != '\0'; j++){
         if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
         printf("O j está em: %d\n", j);
@@ -18,16 +20,27 @@ void remover_especiais(char frase[][max_caracteres], int i){
             printf("frase após tirar especial: %s\n", frase[i]);
         }
 
+        //Para remoção de números:
         else if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            char soma[5];
-
-            if(frase[i][j+1] >= '0' && frase[i][j+1] <= '9'){
-                int c = 0;
-                while(c < 5){
-
+            int acumulador = 1;
+            char soma_str[4];
+            soma_str[0] = frase[i][j];
+            if(frase[i][j+acumulador] >= '0' && frase[i][j+acumulador] <= '9'){
+                while(frase[i][j+acumulador] >= '0' && frase[i][j+acumulador] <= '9'){
+                    soma_str[acumulador] = frase[i][j+acumulador];
+                    acumulador ++;
                 }
+                soma_str[acumulador] = '\0';
+                soma = atoi(soma_str);
             }
 
+            else{
+                soma = (int)frase[i][j] - '0';
+            }
+
+            printf("A soma é %d\n", soma);
+
+            //Sobrescreve os números encontrados
             for(int k = j; k < strlen(frase[i]); k++){
                 printf("O j está em loop: %d\n", k);
                 frase[i][k] = frase[i][k+1];
@@ -117,7 +130,7 @@ int main(){
             printf("frase[%d] = %s\n", i, frase[i]);
         }
 
-        else
+        else if(frase[i][0] != '\0')
             comeca_consoante(i, frase, posicao_final);
 
         adicionar_sufixo(i, frase, posicao_final);
