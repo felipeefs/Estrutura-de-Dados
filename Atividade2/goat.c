@@ -9,7 +9,7 @@ int remover_numeros(char frase[][max_caracteres], int i, int soma){
     for(int j =0; frase[i][j] != '\0'; j++){
         //Para remoção de números:
         if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            char soma_str[4];
+            char soma_str[6];
             int acumulador = 0;
 
             while(frase[i][j] >= '0' && frase[i][j] <= '9'){
@@ -89,13 +89,13 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
 
 void imprir_resultados(char frase[][max_caracteres], int num_palavras, int soma){
     if(soma != 1)
-        printf("%d goats say: ", soma);
+        printf("%d goats say:", soma);
     else
-        printf("%d goat says: ", soma);
+        printf("%d goat says:", soma);
 
     for (int i = 0; i < num_palavras; i++) {
         if(frase[i][0] != '\0')
-            printf("%s ", frase[i]);
+            printf(" %s", frase[i]);
     }
     printf("\n");
 }
@@ -103,45 +103,46 @@ void imprir_resultados(char frase[][max_caracteres], int num_palavras, int soma)
 
 int main(){
     // Ler a frase_total, ver o tamanho dela e criar um vetor para a mesma
-    char frase_total[200000]; 
+    char frase_total[10000]; 
     char frase[max_palavras][max_caracteres];
-    int num_palavras = 0;
-    int soma = 0;
 
-    scanf("%[^\n]", frase_total); //Lê até a quebra de linha ao digitar
+    while (scanf(" %[^\n]", frase_total) != EOF){  //Lê até a quebra de linha ao digitar
+        int num_palavras = 0;
+        int soma = 0;
 
-    //Cria uma matriz frase, em que cada elemento é uma palavra
-    char *palavra = strtok(frase_total, " ");
-    while(palavra != NULL && num_palavras < max_palavras){ 
-        int j;
-        for(j=0; palavra[j] != '\0'; j++){
-            frase[num_palavras][j] = palavra[j];
+        //Cria uma matriz frase, em que cada elemento é uma palavra
+        char *palavra = strtok(frase_total, " ");
+        while(palavra != NULL && num_palavras < max_palavras){ 
+            int j;
+            for(j=0; palavra[j] != '\0'; j++){
+                frase[num_palavras][j] = palavra[j];
+            }
+            frase[num_palavras][j] = '\0';
+            num_palavras++;
+            palavra = strtok(NULL, " ");
         }
-        frase[num_palavras][j] = '\0';
-        num_palavras++;
-        palavra = strtok(NULL, " ");
-    }
 
-    //Analisa palavra por palavra e adiciona as regras de Goat Latin
-    for (int i = 0; i < num_palavras; i++) {
-        //printf("frase[%d] = %s\n", i, frase[i]);
-        
-        soma = remover_numeros(frase, i, soma);
-        remover_especiais(frase, i);
-        
-        int posicao_final = achar_posicao_final(i, frase);
-
-        if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U'){
-            comeca_vogal(i, frase, posicao_final);
+        //Analisa palavra por palavra e adiciona as regras de Goat Latin
+        for (int i = 0; i < num_palavras; i++) {
             //printf("frase[%d] = %s\n", i, frase[i]);
+            
+            soma = remover_numeros(frase, i, soma);
+            remover_especiais(frase, i);
+            
+            int posicao_final = achar_posicao_final(i, frase);
+
+            if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U'){
+                comeca_vogal(i, frase, posicao_final);
+                //printf("frase[%d] = %s\n", i, frase[i]);
+            }
+
+            else if(frase[i][0] != '\0')
+                comeca_consoante(i, frase, posicao_final);
+
+            adicionar_sufixo(i, frase, posicao_final);
+
         }
-
-        else if(frase[i][0] != '\0')
-            comeca_consoante(i, frase, posicao_final);
-
-        adicionar_sufixo(i, frase, posicao_final);
-
+        imprir_resultados(frase, num_palavras, soma);
     }
-    imprir_resultados(frase, num_palavras, soma);
     return 0;
 }
