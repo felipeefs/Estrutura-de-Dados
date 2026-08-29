@@ -6,22 +6,10 @@
 #define max_caracteres 100
 
 void remover_especiais(char frase[][max_caracteres], int i){
-    //Para a remoção de caracteres especiais, sobrescreve-los:
     int soma = 0;
     for(int j =0; frase[i][j] != '\0'; j++){
-        if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
-        printf("O j está em: %d\n", j);
-        
-        for(int k = j; k < strlen(frase[i]); k++){
-            printf("O j está em loop: %d\n", k);
-            frase[i][k] = frase[i][k+1];
-            }
-            j--; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
-            printf("frase após tirar especial: %s\n", frase[i]);
-        }
-
         //Para remoção de números:
-        else if(frase[i][j] >= '0' && frase[i][j] <= '9'){
+        if(frase[i][j] >= '0' && frase[i][j] <= '9'){
             int acumulador = 1;
             char soma_str[4];
             soma_str[0] = frase[i][j];
@@ -33,12 +21,9 @@ void remover_especiais(char frase[][max_caracteres], int i){
                 soma_str[acumulador] = '\0';
                 soma = atoi(soma_str);
             }
-
             else{
                 soma = (int)frase[i][j] - '0';
             }
-
-            printf("A soma é %d\n", soma);
 
             //Sobrescreve os números encontrados
             for(int k = j; k < strlen(frase[i]); k++){
@@ -47,6 +32,18 @@ void remover_especiais(char frase[][max_caracteres], int i){
             }
             j--; 
         }
+
+        //Para a remoção de caracteres especiais, sobrescreve-los:
+        else if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
+        for(int k = j; k < strlen(frase[i]); k++){
+            frase[i][k] = frase[i][k+1];
+            }
+            j--; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
+            printf("frase após tirar especial: %s\n", frase[i]);
+        }
+        
+        printf("A soma é %d\n", soma);
+
 
     }
 }
