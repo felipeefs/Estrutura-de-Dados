@@ -2,14 +2,15 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+
 #define max_palavras 1000
-#define max_caracteres 100
+#define max_caracteres 150
 
 int remover_numeros(char frase[][max_caracteres], int i, int soma){
     for(int j =0; frase[i][j] != '\0'; j++){
         //Para remoção de números:
         if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            char soma_str[6];
+            char soma_str[max_caracteres];
             int acumulador = 0;
 
             while(frase[i][j] >= '0' && frase[i][j] <= '9'){
@@ -64,11 +65,13 @@ void comeca_vogal(int i, char frase[][max_caracteres], int posicao_final){
 
 void comeca_consoante(int i, char frase[][max_caracteres], int posicao_final){
     //Adiciona a primeira letra ao final da palavra, depois retira a primeira letra do começo através de um loop. Ao final adiciona o "ma"
-    frase[i][posicao_final] = frase[i][0];
+    char primeira_letra = frase[i][0];
 
     for(int j = 0; frase[i][j] != '\0'; j++){
         frase[i][j] = frase[i][j+1];
     }
+
+    frase[i][posicao_final - 1] = primeira_letra;
 
     frase[i][posicao_final] = 'm';
     frase[i][posicao_final + 1] = 'a';
@@ -106,21 +109,24 @@ int main(){
     char frase_total[10000]; 
     char frase[max_palavras][max_caracteres];
 
-    while (scanf(" %[^\n]", frase_total) != EOF){  //Lê até a quebra de linha ao digitar
+    while (fgets(frase_total, sizeof(frase_total), stdin) != NULL){  //Lê até a quebra de linha ao digitar
         int num_palavras = 0;
         int soma = 0;
 
         //Cria uma matriz frase, em que cada elemento é uma palavra
-        char *palavra = strtok(frase_total, " ");
+        char *palavra = strtok(frase_total, " \n\r");
         while(palavra != NULL && num_palavras < max_palavras){ 
             int j;
-            for(j=0; palavra[j] != '\0'; j++){
+            for(j=0; palavra[j] != '\0' && j < max_caracteres -1; j++){
                 frase[num_palavras][j] = palavra[j];
             }
             frase[num_palavras][j] = '\0';
             num_palavras++;
-            palavra = strtok(NULL, " ");
+            palavra = strtok(NULL, " \n\r");
         }
+
+        if (num_palavras == 0) 
+            continue;
 
         //Analisa palavra por palavra e adiciona as regras de Goat Latin
         for (int i = 0; i < num_palavras; i++) {
