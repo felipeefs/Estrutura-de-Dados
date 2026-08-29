@@ -5,45 +5,46 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-void remover_especiais(char frase[][max_caracteres], int i){
+void remover_numeros(char frase[][max_caracteres], int i){
     int soma = 0;
+    char soma_str[4];
+    int acumulador = 0;
     for(int j =0; frase[i][j] != '\0'; j++){
         //Para remoção de números:
         if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            int acumulador = 1;
-            char soma_str[4];
-            soma_str[0] = frase[i][j];
-            if(frase[i][j+acumulador] >= '0' && frase[i][j+acumulador] <= '9'){
-                while(frase[i][j+acumulador] >= '0' && frase[i][j+acumulador] <= '9'){
-                    soma_str[acumulador] = frase[i][j+acumulador];
-                    acumulador ++;
-                }
-                soma_str[acumulador] = '\0';
-                soma = atoi(soma_str);
+            if((frase[i][j+1] >= '0' && frase[i][j+1] <= '9') || (frase[i][j-1] >= '0' && frase[i][j-1] <= '9')){
+                soma_str[acumulador] = frase[i][j];
+                printf("A string soma é: %s\n", soma_str);
+                acumulador ++;
             }
             else{
-                soma = (int)frase[i][j] - '0';
+                soma += (int)frase[i][j] - '0';
+                printf("A soma no momento é: %d\n", soma);
             }
 
             //Sobrescreve os números encontrados
             for(int k = j; k < strlen(frase[i]); k++){
-                printf("O j está em loop: %d\n", k);
                 frase[i][k] = frase[i][k+1];
             }
             j--; 
         }
+    }
+    soma_str[acumulador] = '\0';
+    soma += atoi(soma_str);
+    printf("A soma é %d\n", soma);
 
-        //Para a remoção de caracteres especiais, sobrescreve-los:
-        else if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
+}
+
+void remover_especiais(char frase[][max_caracteres], int i){
+    for(int j =0; frase[i][j] != '\0'; j++){
+    //Para a remoção de caracteres especiais, sobrescreve-los:
+        if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
         for(int k = j; k < strlen(frase[i]); k++){
             frase[i][k] = frase[i][k+1];
             }
             j--; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
             printf("frase após tirar especial: %s\n", frase[i]);
-        }
-        
-        printf("A soma é %d\n", soma);
-
+        }        
 
     }
 }
@@ -118,6 +119,7 @@ int main(){
     for (int i = 0; i < num_palavras; i++) {
         printf("frase[%d] = %s\n", i, frase[i]);
         
+        remover_numeros(frase, i);
         remover_especiais(frase, i);
         
         int posicao_final = achar_posicao_final(i, frase);
