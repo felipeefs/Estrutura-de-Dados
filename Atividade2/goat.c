@@ -5,33 +5,30 @@
 #define max_palavras 1000
 #define max_caracteres 100
 
-void remover_numeros(char frase[][max_caracteres], int i){
-    int soma = 0;
-    char soma_str[4];
-    int acumulador = 0;
+int remover_numeros(char frase[][max_caracteres], int i, int soma){
     for(int j =0; frase[i][j] != '\0'; j++){
         //Para remoção de números:
         if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            if((frase[i][j+1] >= '0' && frase[i][j+1] <= '9') || (frase[i][j-1] >= '0' && frase[i][j-1] <= '9')){
+            char soma_str[4];
+            int acumulador = 0;
+
+            while(frase[i][j] >= '0' && frase[i][j] <= '9'){
                 soma_str[acumulador] = frase[i][j];
-                printf("A string soma é: %s\n", soma_str);
                 acumulador ++;
-            }
-            else{
-                soma += (int)frase[i][j] - '0';
-                printf("A soma no momento é: %d\n", soma);
+
+                //Sobrescreve os números encontrados (sempre voltando uma casa, logo o while só para quando não tem números lado a lado)
+                for(int k = j;frase[i][k] != '\0'; k++){
+                    frase[i][k] = frase[i][k+1];
+                }    
             }
 
-            //Sobrescreve os números encontrados
-            for(int k = j; k < strlen(frase[i]); k++){
-                frase[i][k] = frase[i][k+1];
-            }
+            soma_str[acumulador] = '\0';
+            soma += atoi(soma_str);
             j--; 
         }
     }
-    soma_str[acumulador] = '\0';
-    soma += atoi(soma_str);
-    printf("A soma é %d\n", soma);
+    //printf("A soma é %d\n", soma);
+    return soma;
 
 }
 
@@ -39,11 +36,11 @@ void remover_especiais(char frase[][max_caracteres], int i){
     for(int j =0; frase[i][j] != '\0'; j++){
     //Para a remoção de caracteres especiais, sobrescreve-los:
         if(!((frase[i][j] >= 'a' && frase[i][j] <= 'z') ||(frase[i][j] >= 'A' && frase[i][j] <= 'Z'))){
-        for(int k = j; k < strlen(frase[i]); k++){
+        for(int k = j; frase[i][k] != '\0'; k++){
             frase[i][k] = frase[i][k+1];
             }
             j--; //Diminui 1, porque quando arrasta todos para a esquerda, o caractere que está a direita do especial precisa ser verificado
-            printf("frase após tirar especial: %s\n", frase[i]);
+            //printf("frase após tirar especial: %s\n", frase[i]);
         }        
 
     }
@@ -85,13 +82,22 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
 
     for(int j = posicao_final ; j < n_sufixo + posicao_final ; j++){ 
         frase[i][j] = 'a';
-        //printf("O j é %d\n", j);
     }
-    //printf("A posicao final é: %d\n", posicao_final);
 
-    frase[i][(posicao_final + n_sufixo) + 1] = '\0';
-    
-    //printf("A posição final agora é: %d\n", posicao_final);
+    frase[i][posicao_final + n_sufixo] = '\0';
+}
+
+void imprir_resultados(char frase[][max_caracteres], int num_palavras, int soma){
+    if(soma != 1)
+        printf("%d goats say: ", soma);
+    else
+        printf("%d goat says: ", soma);
+
+    for (int i = 0; i < num_palavras; i++) {
+        if(frase[i][0] != '\0')
+            printf("%s ", frase[i]);
+    }
+    printf("\n");
 }
 
 
@@ -100,6 +106,7 @@ int main(){
     char frase_total[200000]; 
     char frase[max_palavras][max_caracteres];
     int num_palavras = 0;
+    int soma = 0;
 
     scanf("%[^\n]", frase_total); //Lê até a quebra de linha ao digitar
 
@@ -117,16 +124,16 @@ int main(){
 
     //Analisa palavra por palavra e adiciona as regras de Goat Latin
     for (int i = 0; i < num_palavras; i++) {
-        printf("frase[%d] = %s\n", i, frase[i]);
+        //printf("frase[%d] = %s\n", i, frase[i]);
         
-        remover_numeros(frase, i);
+        soma = remover_numeros(frase, i, soma);
         remover_especiais(frase, i);
         
         int posicao_final = achar_posicao_final(i, frase);
 
         if(frase[i][0] == 'a' || frase[i][0] == 'e' || frase[i][0] == 'i' || frase[i][0] == 'o' || frase[i][0] == 'u' || frase[i][0] == 'A' || frase[i][0] == 'E' || frase[i][0] == 'O' || frase[i][0] == 'I' || frase[i][0] == 'U'){
             comeca_vogal(i, frase, posicao_final);
-            printf("frase[%d] = %s\n", i, frase[i]);
+            //printf("frase[%d] = %s\n", i, frase[i]);
         }
 
         else if(frase[i][0] != '\0')
@@ -134,15 +141,7 @@ int main(){
 
         adicionar_sufixo(i, frase, posicao_final);
 
-        
-        printf("frase[%d] = %s\n", i, frase[i]);
-
-        /* 
-        for(int j =0; frase[i][j] != '\0'; j ++){
-            printf("A letra da palavra: %c\n", frase[i][j]);
-        }
-        */
-
     }
+    imprir_resultados(frase, num_palavras, soma);
     return 0;
 }
