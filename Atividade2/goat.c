@@ -4,18 +4,17 @@
 #include <stdlib.h>
 
 #define max_palavras 1000
-#define max_caracteres 150
+#define max_caracteres 1200
 
-int remover_numeros(char frase[][max_caracteres], int i, int soma){
+long long remover_numeros(char frase[][max_caracteres], int i, long long soma){
     for(int j =0; frase[i][j] != '\0'; j++){
         //Para remoção de números:
         if(frase[i][j] >= '0' && frase[i][j] <= '9'){
-            char soma_str[max_caracteres];
-            int acumulador = 0;
+            long long num_acumulado = 0;
 
             while(frase[i][j] >= '0' && frase[i][j] <= '9'){
-                soma_str[acumulador] = frase[i][j];
-                acumulador ++;
+                //Acumula o número matematicamente
+                num_acumulado = num_acumulado * 10 + (frase[i][j] - '0');
 
                 //Sobrescreve os números encontrados (sempre voltando uma casa, logo o while só para quando não tem números lado a lado)
                 for(int k = j;frase[i][k] != '\0'; k++){
@@ -23,8 +22,7 @@ int remover_numeros(char frase[][max_caracteres], int i, int soma){
                 }    
             }
 
-            soma_str[acumulador] = '\0';
-            soma += atoi(soma_str);
+            soma += num_acumulado;
             j--; 
         }
     }
@@ -90,11 +88,11 @@ void adicionar_sufixo(int i, char frase[][max_caracteres], int n_sufixo){
     frase[i][posicao_final + n_sufixo] = '\0';
 }
 
-void imprir_resultados(char frase[][max_caracteres], int num_palavras, int soma){
+void imprir_resultados(char frase[][max_caracteres], int num_palavras, long long soma){
     if(soma != 1)
-        printf("%d goats say:", soma);
+        printf("%lld goats say:", soma);
     else
-        printf("%d goat says:", soma);
+        printf("%lld goat says:", soma);
 
     for (int i = 0; i < num_palavras; i++) {
         if(frase[i][0] != '\0')
@@ -111,7 +109,7 @@ int main(){
 
     while (fgets(frase_total, sizeof(frase_total), stdin) != NULL){  //Lê até a quebra de linha ao digitar
         int num_palavras = 0;
-        int soma = 0;
+        long long soma = 0;
 
         //Cria uma matriz frase, em que cada elemento é uma palavra
         char *palavra = strtok(frase_total, " \n\r");
