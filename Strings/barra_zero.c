@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main(void) {
-    /*Ao final da string a um /0 que indica que a string acabou, nesses loops ao encontra-las o loop para*/
+    /*Ao final da string a um /0 que indica que a string acabou, nesses loops ao encontra-las o loop para   */
     char s[] = "abcdef";
 
     for (int i=0; s[i] != '\0'; i++)
