@@ -9,8 +9,6 @@ void ler_entradas(int n, int vetor[n]){
         }
     }
     
-    //Adicionar a entrada para quando ocasionar em uma soma e quando for uma atualização
-
 void criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
     int i, inicio=0, fim=raiz_r;
 
@@ -27,10 +25,6 @@ void criar_r(int n, int vetor[n], int raiz_r, int vetor_r[raiz_r]){
         }
         fim +=raiz_r;
     }
-    /*Prints para testar
-    for(i=0; i<raiz_r; i++){ 
-        //printf("%d\n", vetor_r[i]);
-        }*/
 }
 
     
@@ -75,16 +69,6 @@ void atualizar(int i, int x, int n, int vetor[n], int raiz_r, int vetor_r[raiz_r
     vetor_r[indice_r] += (x - vetor[i]);
     vetor[i] = x;
 
-    /*Testes
-    int b;
-    for(b=0; b<raiz_r; b++){ 
-        printf("%d\n", vetor_r[b]);
-        }
-    for(b =0; b<n; b++){
-        printf("%d = %d\n", b, vetor[b]);
-    }
-
-    printf("indice : %d\n", indice_r); */
 }
     
 int main(void){
@@ -94,7 +78,7 @@ int main(void){
     int vetor[n];
 
     //Le as entradas e cria um vetor r, com base em V
-    int raiz_r = (int)round(sqrt(n));   
+    int raiz_r = (int)ceil(sqrt(n));   
     int vetor_r[raiz_r];
     ler_entradas(n, vetor);
     criar_r(n, vetor, raiz_r, vetor_r);
