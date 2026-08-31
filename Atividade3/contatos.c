@@ -22,13 +22,14 @@ void adicionar_contato(contato contatos[], int num_contatos){
 void remover_contatos(contato contatos[], int *num_contatos){
     char nome_procurado[51];
     scanf(" %50[^\n]", nome_procurado);
-    printf("%s\n", nome_procurado);
-
+    int apagos = 0;
     int indice_procurado = 0;
+
     for(indice_procurado; indice_procurado < *num_contatos; indice_procurado ++){
         if(strcmp(nome_procurado, contatos[indice_procurado].nome) == 0 && indice_procurado == *num_contatos -1){
             //Caso para quando o ultimo contato for o procurado, ele não será removida de lista (não é possível), mas a contagem de num_contatos diminui
             (*num_contatos) --;
+            apagos ++;
             printf("Encontrou nome igual\n");
         }
 
@@ -38,12 +39,30 @@ void remover_contatos(contato contatos[], int *num_contatos){
                 contatos[i] = contatos[i+1];
             }
             (*num_contatos)--;
+            apagos ++;
             printf("Encontrou nome igual\n");
         }
     }
 
-    printf("A pessoa é a: %d. No indice %d\n", indice_procurado, indice_procurado -1);
-    //return *num_contatos;
+    printf("Contatos de %s removidos: %d\n", nome_procurado, apagos);
+
+}
+
+void buscar_contatos(contato contatos[], int num_contatos){
+    char nome_procurado[51];
+    scanf(" %50[^\n]", nome_procurado);
+
+    for(int i = 0; i < num_contatos; i++){
+        if(strcmp(nome_procurado, contatos[i].nome) == 0){
+            printf("Resultado da busca:\n");
+            printf("(%d) %s	%s	%ld	%s\n\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
+        }
+        else{
+            printf("Resultado da busca:\n");
+            printf("Nenhum contato.\n\n");
+        }
+
+    }
 
 }
 
@@ -62,6 +81,8 @@ int main(){
         case 'r':
             remover_contatos(contatos, &num_contatos);
             break;
+        case 'b':
+            buscar_contatos(contatos, num_contatos);
         default:
             break;
         }
