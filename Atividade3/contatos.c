@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 typedef struct{
         char nome[51];
@@ -14,28 +15,37 @@ void adicionar_contato(contato contatos[], int num_contatos){
     scanf(" %100[^\n]", contatos[num_contatos].endereco);
     scanf(" %ld", &contatos[num_contatos].telefone);  
     scanf(" %8[^\n]", contatos[num_contatos].data);     
-    num_contatos ++;
 
+    printf("Contato para %s inserido.\n\n", contatos[num_contatos].nome);
 }
 
-void remover_contatos(contato contatos[], int num_contatos){
+void remover_contatos(contato contatos[], int *num_contatos){
     char nome_procurado[51];
     scanf(" %50[^\n]", nome_procurado);
+    printf("%s\n", nome_procurado);
 
     int indice_procurado = 0;
-    for(indice_procurado; indice_procurado < num_contatos; indice_procurado ++){
-        if(nome_procurado == contatos[num_contatos].nome)
-            break;
-        indice_procurado ++;
+    for(indice_procurado; indice_procurado < *num_contatos; indice_procurado ++){
+        if(strcmp(nome_procurado, contatos[indice_procurado].nome) == 0 && indice_procurado == *num_contatos -1){
+            //Caso para quando o ultimo contato for o procurado, ele não será removida de lista (não é possível), mas a contagem de num_contatos diminui
+            (*num_contatos) --;
+            printf("Encontrou nome igual\n");
+        }
+
+        else if(strcmp(nome_procurado, contatos[indice_procurado].nome) == 0){
+            //Sobrescreve os valores, quando o contato for removido
+            for(int i = indice_procurado; i < *num_contatos - 1; i++){
+                contatos[i] = contatos[i+1];
+            }
+            (*num_contatos)--;
+            printf("Encontrou nome igual\n");
+        }
     }
 
-    printf("O indice procurado é: %d. No indice %d\n", indice_procurado, indice_procurado -1);
-
-
+    printf("A pessoa é a: %d. No indice %d\n", indice_procurado, indice_procurado -1);
+    //return *num_contatos;
 
 }
-
-
 
 int main(){
     char operacao;
@@ -50,19 +60,19 @@ int main(){
             num_contatos ++;
             break;
         case 'r':
-            remover_contatos(contatos, num_contatos);
+            remover_contatos(contatos, &num_contatos);
             break;
         default:
             break;
         }
     }
     for(int i = 0; i < num_contatos; i++){
+        printf("----------\n");
         printf("%s\n", contatos[i].nome);
         printf("%s\n", contatos[i].endereco);
         printf("%ld\n", contatos[i].telefone);  
         printf("%s\n", contatos[i].data);   
         printf("O numero de contatos é: %d\n", i + 1);  
-        printf("----------\n");
     }
 
     
