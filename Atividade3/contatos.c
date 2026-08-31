@@ -30,7 +30,6 @@ void remover_contatos(contato contatos[], int *num_contatos){
             //Caso para quando o ultimo contato for o procurado, ele não será removida de lista (não é possível), mas a contagem de num_contatos diminui
             (*num_contatos) --;
             apagos ++;
-            printf("Encontrou nome igual\n");
         }
 
         else if(strcmp(nome_procurado, contatos[indice_procurado].nome) == 0){
@@ -40,15 +39,15 @@ void remover_contatos(contato contatos[], int *num_contatos){
             }
             (*num_contatos)--;
             apagos ++;
-            printf("Encontrou nome igual\n");
         }
     }
 
-    printf("Contatos de %s removidos: %d\n", nome_procurado, apagos);
+    printf("Contatos de %s removidos: %d\n\n", nome_procurado, apagos);
 
 }
 
 void buscar_contatos(contato contatos[], int num_contatos){
+    //Com base no nome inserido, lista todos os dados desse contato, caso ele exista
     char nome_procurado[51];
     scanf(" %50[^\n]", nome_procurado);
 
@@ -61,8 +60,23 @@ void buscar_contatos(contato contatos[], int num_contatos){
             printf("Resultado da busca:\n");
             printf("Nenhum contato.\n\n");
         }
-
     }
+}
+
+void listar_contatos(contato contatos[], int num_contatos){
+
+    printf("Listagem:\n");
+    if(num_contatos != 0){ 
+        for(int i = 0; i < num_contatos; i++){
+            printf("(%d) %s	%s	%ld	%s\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
+        }
+    }
+
+    else{
+        printf("Nenhum contato.");
+    }    
+
+    printf("\n");
 
 }
 
@@ -83,10 +97,16 @@ int main(){
             break;
         case 'b':
             buscar_contatos(contatos, num_contatos);
+            break;
+        case 'p':
+            listar_contatos(contatos, num_contatos);
+            break;  
         default:
             break;
         }
     }
+
+    /*
     for(int i = 0; i < num_contatos; i++){
         printf("----------\n");
         printf("%s\n", contatos[i].nome);
@@ -95,6 +115,7 @@ int main(){
         printf("%s\n", contatos[i].data);   
         printf("O numero de contatos é: %d\n", i + 1);  
     }
+        */
 
     
 }
