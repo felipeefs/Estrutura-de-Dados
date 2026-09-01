@@ -71,13 +71,12 @@ void listar_contatos(contato contatos[], int num_contatos){
     printf("Listagem:\n");
     if(num_contatos != 0){ 
         for(int i = 0; i < num_contatos; i++){
-            printf("(%d) %s\t%s\t%s\t%s\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
-            printf("\n");
+            printf("(%d) %s\t%s\t%s\t%s\n\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
         }
     }
 
     else{
-        printf("Nenhum contato.\n");
+        printf("Nenhum contato.\n\n");
     }    
 }
 
