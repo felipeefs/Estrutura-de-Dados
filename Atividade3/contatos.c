@@ -5,7 +5,7 @@ typedef struct{
         char nome[51];
         char endereco[101];
         char telefone[16];
-        char data[9];
+        char data[11];
 
     }contato;
 
@@ -13,8 +13,8 @@ void adicionar_contato(contato contatos[], int num_contatos){
     //Adiciona um contato com base no struct contato, em que as entradas tem um limite de caracteres que deve ser respeitado
     scanf(" %50[^\n]", contatos[num_contatos].nome);
     scanf(" %100[^\n]", contatos[num_contatos].endereco);
-    scanf(" %15[^\n]", contatos[num_contatos].telefone);  
-    scanf(" %8[^\n]", contatos[num_contatos].data);     
+    scanf(" %s", contatos[num_contatos].telefone);  
+    scanf(" %s", contatos[num_contatos].data);     
 
     printf("Contato para %s inserido.\n\n", contatos[num_contatos].nome);
 }
@@ -71,13 +71,14 @@ void listar_contatos(contato contatos[], int num_contatos){
     printf("Listagem:\n");
     if(num_contatos != 0){ 
         for(int i = 0; i < num_contatos; i++){
-            printf("(%d) %s\t%s\t%s\t%s\n\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
+            printf("(%d) %s\t%s\t%s\t%s\n", i+1, contatos[i].nome, contatos[i].endereco, contatos[i].telefone, contatos[i].data);
         }
     }
 
     else{
-        printf("Nenhum contato.\n\n");
-    }    
+        printf("Nenhum contato.\n");
+    }   
+    printf("\n");
 }
 
 int main(){
