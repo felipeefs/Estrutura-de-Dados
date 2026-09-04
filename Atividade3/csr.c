@@ -12,17 +12,18 @@ void realocar_vetorR(int *R, int k, int *L){
 
     int posicao = 1;
     int ocorrencia = 1;
-    int atual = L[0];
     for(int f = 0; f < k; f++){
-        if(atual == L[f+1] && (atual+1) == posicao){
+        if(L[f] == L[f+1] && (L[f]+1) == posicao){
             ocorrencia += 1;
-            atual = L[f+1];
+            
         }
-        else if(atual != L[f+1] && (atual+1) == posicao){
+        else if(L[f] != L[f+1] && (L[f]+1) == posicao){
             R[posicao] = ocorrencia;
-            ocorrencia += 1; //A ocorrencia nao pode aumentar aqui
             posicao += 1;
-            atual = L[f+1];
+            if(L[f + 1] + 1 == posicao || f + 1 > k){ // Isso da dando erro na memoria eu acho, ele le um numero que não existe no limite da lista e da errado
+                ocorrencia += 1;
+            }
+
         }
         else{
             R[posicao] = ocorrencia;
@@ -34,7 +35,7 @@ void realocar_vetorR(int *R, int k, int *L){
 }
     
 int main(){
-    int k, i, j, x, i_max = 0;
+    int k, i_max = 0;
     scanf(" %d", &k);
     int *A = malloc(k * sizeof(int)); //Armazena os valores de x
     int *C = malloc(k * sizeof(int)); //Armazena os valores das colunas
@@ -46,8 +47,8 @@ int main(){
     for(int f = 0; f < k; f++){
         scanf("%d %d %d", &L[f], &C[f], &A[f]);
  
-        if(L[i] > i_max){
-            i_max = L[i];
+        if(L[f] > i_max){
+            i_max = L[f];
         }
     }
     
