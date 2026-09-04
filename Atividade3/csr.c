@@ -8,13 +8,23 @@ int comparar_inteiros(const void *a, const void *b){
 
 void realocar_vetorR(int *R, int k, int *L){
     R[0] = 0; //O vetor R sempre começa zerado
-    
+
+    int posicao = 1;
+    int ocorrencia = 1;
+    int atual = L[0];
     for(int f = 0; f < k; f++){
-        
+        if(atual == L[f+1]){
+            ocorrencia += 1;
+            continue;
+        }
+        else{
+            R[posicao] = ocorrencia;
+            ocorrencia = 1;
+            posicao += 1;
+            atual = L[f];
+        }
         
     }
-
-
 }
 
 
@@ -24,7 +34,7 @@ int main(){
     scanf(" %d", &k);
     int *A = malloc(k * sizeof(int)); //Armazena os valores de x
     int *C = malloc(k * sizeof(int)); //Armazena os valores das colunas
-    int *L = malloc(k * sizeof(int));
+    int *L = malloc(k * sizeof(int)); //Armazena os valores das linhas
 
     if(A == NULL|| C == NULL || L == NULL)
         return 1;
@@ -42,22 +52,25 @@ int main(){
 
 
     int *R = malloc((i_max +1) * sizeof(int));
-    realocar_vetorR(&R, k, &L);
+    realocar_vetorR(R, k, L);
 
 
-    /*
+    
     for(int f = 0; f < k; f++){
-        printf("A na é %d, na posicao %d\n", A[f], f);
-        printf("C na é %d, na posicao %d\n", C[f], f);
+        //printf("A na é %d, na posicao %d\n", A[f], f);
+        //printf("C na é %d, na posicao %d\n", C[f], f);
         printf("L é igual a %d na posicao %d\n", L[f], f);
-
-        printf("%d\n", i_max);
     }
-        */
+    //printf("%d\n", i_max);
+
+    for(int f = 0; f < i_max + 2; f ++){
+        printf("R é igual a %d na posicao %d\n", R[f], f);
+    }
 
     free(C);
     free(L);
     free(A);
+    free(R);
     
 
 }
