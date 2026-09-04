@@ -6,6 +6,7 @@ int comparar_inteiros(const void *a, const void *b){
     return (*(int *)a) - (*(int *)b);
 }
 
+
 void realocar_vetorR(int *R, int k, int *L){
     R[0] = 0; //O vetor R sempre começa zerado
 
@@ -15,17 +16,18 @@ void realocar_vetorR(int *R, int k, int *L){
     for(int f = 0; f < k; f++){
         if(atual == L[f+1]){
             ocorrencia += 1;
-            continue;
+            atual = L[f+1];
         }
         else{
             R[posicao] = ocorrencia;
-            ocorrencia = 1;
+            ocorrencia += 1;
             posicao += 1;
-            atual = L[f];
+            atual = L[f+1];
         }
         
     }
 }
+    
 
 
 
