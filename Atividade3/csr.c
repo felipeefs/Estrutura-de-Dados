@@ -11,25 +11,13 @@ void realocar_vetorR(int *R, int k, int *L){
     R[0] = 0; //O vetor R sempre começa zerado
 
     int posicao = 1;
-    int ocorrencia = 1;
+    int ocorrencia = 0;
     for(int f = 0; f < k; f++){
-        if(L[f] == L[f+1] && (L[f]+1) == posicao){
-            ocorrencia += 1;
-            
-        }
-        else if(L[f] != L[f+1] && (L[f]+1) == posicao){
-            R[posicao] = ocorrencia;
-            posicao += 1;
-            if(L[f + 1] + 1 == posicao || f + 1 > k){ // Isso da dando erro na memoria eu acho, ele le um numero que não existe no limite da lista e da errado
-                ocorrencia += 1;
-            }
+        ocorrencia += 1;
 
-        }
-        else{
-            R[posicao] = ocorrencia;
-            posicao += 1;
-            //atual = L[f];
-            f --;
+        if(f + 1 == k || L[f] != L[f+1]){
+            R[posicao] = ocorrencia;       
+            posicao += 1;  
         }
     }
 }
