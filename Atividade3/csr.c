@@ -14,23 +14,25 @@ void realocar_vetorR(int *R, int k, int *L){
     int ocorrencia = 1;
     int atual = L[0];
     for(int f = 0; f < k; f++){
-        if(atual == L[f+1]){
+        if(atual == L[f+1] && (atual+1) == posicao){
             ocorrencia += 1;
+            atual = L[f+1];
+        }
+        else if(atual != L[f+1] && (atual+1) == posicao){
+            R[posicao] = ocorrencia;
+            ocorrencia += 1; //A ocorrencia nao pode aumentar aqui
+            posicao += 1;
             atual = L[f+1];
         }
         else{
             R[posicao] = ocorrencia;
-            ocorrencia += 1;
             posicao += 1;
-            atual = L[f+1];
+            //atual = L[f];
+            f --;
         }
-        
     }
 }
     
-
-
-
 int main(){
     int k, i, j, x, i_max = 0;
     scanf(" %d", &k);
