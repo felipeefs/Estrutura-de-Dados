@@ -6,21 +6,29 @@ int comparar_inteiros(const void *a, const void *b){
     return (*(int *)a) - (*(int *)b);
 }
 
-
 void realocar_vetorR(int *R, int k, int *L){
     R[0] = 0; //O vetor R sempre começa zerado
 
     int posicao = 1;
-    int ocorrencia = 0;
+    int ocorrencia = 1;
     for(int f = 0; f < k; f++){
-        ocorrencia += 1;
-
-        if(f + 1 == k || L[f] != L[f+1]){
-            R[posicao] = ocorrencia;       
-            posicao += 1;  
+        if(L[f] == L[f+1] && (L[f]+1) == posicao){
+            ocorrencia += 1;
+        }
+        else if(L[f] != L[f+1] && (L[f]+1) == posicao){
+            R[posicao] = ocorrencia;
+            ocorrencia += 1; //A ocorrencia nao pode aumentar aqui
+            posicao += 1;
+        }
+        else{
+            R[posicao] = ocorrencia - 1;
+            posicao += 1;
+            //atual = L[f];
+            f --;
         }
     }
 }
+
     
 int main(){
     int k, i_max = 0;
@@ -64,6 +72,5 @@ int main(){
     free(L);
     free(A);
     free(R);
-    
 
 }
