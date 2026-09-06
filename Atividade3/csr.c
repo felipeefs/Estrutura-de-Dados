@@ -1,9 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct{
+    int linha;
+    int coluna;
+    int valor;
+} matriz;
+
 int comparar_inteiros(const void *a, const void *b){
-    //Compara dois inteiros da lista, para serem ordenados
-    return (*(int *)a) - (*(int *)b);
+    matriz *e1 = (matriz *)a;
+    matriz *e2 = (matriz *)b;
+
+    // Compara duas linhas
+    if(e1->linha != e2 -> linha){
+        return e1 -> linha - e2 -> linha;
+    }
+    //Se as linhas forem iguais, ordena-se as colunas
+    return e1 -> coluna - e2 -> coluna;
+
 }
 
 void realocar_vetorR(int *R, int k, int *L){
@@ -13,10 +27,10 @@ void realocar_vetorR(int *R, int k, int *L){
     int posicao = 1;
     int ocorrencia = 1;
     for(int f = 0; f < k; f++){
-        if(L[f] == L[f+1] && (L[f]+1) == posicao){
+        if(L[f] == L[f+1] && (L[f]+1) == posicao && f < k -1){
             ocorrencia += 1;
         }
-        else if(L[f] != L[f+1] && (L[f]+1) == posicao){
+        else if(L[f] != L[f+1] && (L[f]+1) == posicao && f < k-1){
             R[posicao] = ocorrencia;
             ocorrencia += 1;
             posicao += 1;
@@ -47,7 +61,7 @@ int procurar_coluna(int *R, int *C, int j, int i){
             return f;
         }
     }
-    return 0; //Devolve-se um booleano False, caso contrário
+    return -1; //Devolve-se um booleano False, caso contrário
 
 }
 
@@ -70,7 +84,19 @@ int main(){
     }
     
     //Ordena os elementos da lista
-    qsort(L, k, sizeof(int), comparar_inteiros);
+    matriz *temporaria = malloc(k * sizeof(matriz));
+    for(int f = 0; f < k; f++){
+        temporaria[f].linha = L[f];
+        temporaria[f].coluna = C[f];
+        temporaria[f].valor = A[f];
+    }
+    qsort(temporaria, k, sizeof(matriz), comparar_inteiros);
+    for(int f = 0; f <k; f++){
+        L[f] = temporaria[f].linha;
+        C[f] = temporaria[f].coluna;
+        A[f] = temporaria[f].valor;
+    }  
+    free(temporaria);
 
     //Cria o vetor R, e a partir do vetor L ele é preenchido
     int *R = malloc((i_max +1) * sizeof(int));
@@ -87,10 +113,9 @@ int main(){
         if(quantidade_deNumeros){
             int valor_j = procurar_coluna(R, C, j, i);
             printf("O indice de j é %d\n", valor_j);
-                if(valor_j){
+                if(valor_j != -1){
                     printf("%d\n", A[valor_j]);
                 }
-
                 else{ //Talvez isso de problema, pois vai que encontra na posição 0, e ele le como False
                     printf("0\n");
                 }
