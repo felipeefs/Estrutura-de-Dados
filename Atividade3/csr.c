@@ -30,27 +30,27 @@ void realocar_vetorR(int *R, int k, int *L){
     }
 }
 
-int procurar_Nnulos(int *R, int i){
+int procurar_Nnulos(int *R, int i, int i_max){
     //Na linha em que queremos achar o valor, verifica-se se há elementos não nulos e devolve sua quantidade
-    return R[i+1] - R[i];   
+    if(i < (i_max +1))
+        return (R[i+1] - R[i]); 
+    else
+        return 0;  
 
 }
 
 int procurar_coluna(int *R, int *C, int j, int i){
     //A partir dos valores de R, procura-se a ocorrência de j na lista das colunas (C), e devolve-se a posicção em que ele foi encontrado
-    for(int f = R[i]; f < R[i+1] - 1; f++){
+    for(int f = R[i]; f <= (R[i+1] - 1); f++){
         if (C[f] == j){
+            printf("A coluna em C: %d. O j: %d\n", C[f], j);
             return f;
         }
-        else
-            return 0; //Devolve-se um booleano False, caso contrário
     }
+    return 0; //Devolve-se um booleano False, caso contrário
+
 }
 
-
-
-
-    
 int main(){
     int k, i_max = 0;
     scanf(" %d", &k);
@@ -62,7 +62,7 @@ int main(){
         return 1;
 
     for(int f = 0; f < k; f++){
-        scanf("%d %d %d", &L[f], &C[f], &A[f]);
+        scanf(" %d %d %d", &L[f], &C[f], &A[f]);
  
         if(L[f] > i_max){
             i_max = L[f];
@@ -82,21 +82,22 @@ int main(){
         if(i == -1 && j == -1)
             break;
 
-        int quantidade_deNumeros = procurar_Nnulos(R, i);
+        int quantidade_deNumeros = procurar_Nnulos(R, i, i_max);
+        printf("A quantidade de numeros é: %d\n", quantidade_deNumeros);
         if(quantidade_deNumeros){
             int valor_j = procurar_coluna(R, C, j, i);
+            printf("O indice de j é %d\n", valor_j);
                 if(valor_j){
-                    printf(" %d\n", A[valor_j]);
+                    printf("%d\n", A[valor_j]);
                 }
 
                 else{ //Talvez isso de problema, pois vai que encontra na posição 0, e ele le como False
                     printf("0\n");
                 }
-
         }
 
         else{
-            printf("%d\n", quantidade_deNumeros);
+            printf(" %d\n", quantidade_deNumeros);
         }
 
     }
