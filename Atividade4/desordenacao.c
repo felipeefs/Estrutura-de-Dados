@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void contar_desordenação(char **palavras, long *ocorrencias, int j){
+void contar_desordenação(char **palavras, long *ocorrencias, int j, int k){
     long soma = 0;
     int t = 0;
-    for(int i = 0; palavras[i][t] != '\0'; i++){
+    for(int i = 0; i < k; i++){
         for(t = 0; t < j - 1; t++){ //Menos 1 no j, porque o ultimo elemento nunca precisa ser comparado
-            printf("A palavra atual tem tamanho: %d, e a proxima tem %d\n", (int)palavras[i][j], (int)palavras[i][j]);
-            if((int)palavras[i][j] > (int)palavras[i][j+1]){
-                soma +=1;
+            printf("A letra atual tem tamanho: %d, e a proxima tem %d\n", (int)palavras[i][t], (int)palavras[i][t+1]);
+            if(((int)palavras[i][t]) > ((int)palavras[i][t+1])){
+                soma ++;
             }
         }
         ocorrencias[i] = soma;
@@ -40,7 +40,7 @@ int main(){
             scanf(" %[^\n]", palavras[i]);
         }
 
-        contar_desordenação(palavras, ocorrencias, j);
+        contar_desordenação(palavras, ocorrencias, j, k);
 
         for(int i = 0; i<k; i++){
             printf("O DNA é: %s; com tamanho %ld\n", palavras[i], ocorrencias[i]);
