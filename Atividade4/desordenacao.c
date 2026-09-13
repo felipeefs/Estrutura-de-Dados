@@ -18,11 +18,73 @@ void contar_desordenação(char **palavras, long *ocorrencias, int j, int k){
     }
 }
 
+
+void ordenar_vetores(char **palavras, long *ocorrencias, int l, int m, int k){
+    int n1 = m - l + 1;
+    int n2 = k - m;
+
+    long esq_oco[n1], dir_oco[n2];
+    char *esq_pala[n1], *dir_pala[n2];
+
+    for (int i = 0; i <n1; i++){
+        esq_oco[i] = ocorrencias[l + i];
+        esq_pala[i] = palavras[l + i];
+    }
+
+    for(int j = 0; j <n2; j++){
+        dir_oco[j] = ocorrencias[m + 1 + j];
+        dir_pala[j] = palavras[m + 1 + j];
+    }
+
+    int i = 0, j = 0, f = l;
+
+    while(i < n1 && j < n2){
+        if(esq_oco[i] <= dir_oco[j]){
+            ocorrencias[f] = esq_oco[i];
+            palavras[f] = esq_pala[i];
+            f++;
+            i++;
+        }
+        else{
+            ocorrencias[f] = dir_oco[j];
+            palavras[f] = dir_pala[j];
+            f++;
+            j++;
+        }
+    }
+
+    while (i<n1){
+        ocorrencias[f] = esq_oco[i];
+        palavras[f] = esq_pala[i];
+        i++;
+        f++;
+    }
+    while(j<n2){
+        ocorrencias[f] = dir_oco[j];
+        palavras[f] = dir_pala[j];
+        j++;
+        f++;
+    }
+}
+
+void merge_sort(char **palavras, long*ocorrencias, int l, int k){
+    if (l < k){
+        int m = l + (k - l) / 2;
+        
+        merge_sort(palavras, ocorrencias, l, m);
+        merge_sort(palavras, ocorrencias, m +1, k);
+
+        ordenar_vetores(palavras, ocorrencias, l, m, k);
+    }
+}
+
 int main(){
     long entradas;
     scanf("%ld", &entradas);
+    
 
     while(entradas > 0){
+        scanf("\n");
         int j, k;
         scanf("%d %d", &j, &k);
 
@@ -43,13 +105,11 @@ int main(){
         }
 
         contar_desordenação(palavras, ocorrencias, j, k);
+        merge_sort(palavras, ocorrencias, 0, k -1);
 
         for(int i = 0; i<k; i++){
             printf("O DNA é: %s; com tamanho %ld\n", palavras[i], ocorrencias[i]);
-            printf("A letra do DNA é: %c\n", palavras[i][i]);
-
-
-
+            //printf("A letra do DNA é: %c\n", palavras[i][i]);
         }
 
         entradas --;
