@@ -18,14 +18,15 @@ void contar_desordenação(char **palavras, long *ocorrencias, int j, int k){
     }
 }
 
-
 void ordenar_vetores(char **palavras, long *ocorrencias, int l, int m, int k){
+    //Função para separar vetores, e ordena-los
     int n1 = m - l + 1;
     int n2 = k - m;
 
     long esq_oco[n1], dir_oco[n2];
     char *esq_pala[n1], *dir_pala[n2];
 
+    //Divide os vetores em dois
     for (int i = 0; i <n1; i++){
         esq_oco[i] = ocorrencias[l + i];
         esq_pala[i] = palavras[l + i];
@@ -38,6 +39,7 @@ void ordenar_vetores(char **palavras, long *ocorrencias, int l, int m, int k){
 
     int i = 0, j = 0, f = l;
 
+    //Intercala os vetores pelo seu tamanho
     while(i < n1 && j < n2){
         if(esq_oco[i] <= dir_oco[j]){
             ocorrencias[f] = esq_oco[i];
@@ -53,6 +55,7 @@ void ordenar_vetores(char **palavras, long *ocorrencias, int l, int m, int k){
         }
     }
 
+    //Aloca os elementos que sobraram
     while (i<n1){
         ocorrencias[f] = esq_oco[i];
         palavras[f] = esq_pala[i];
@@ -68,6 +71,7 @@ void ordenar_vetores(char **palavras, long *ocorrencias, int l, int m, int k){
 }
 
 void merge_sort(char **palavras, long*ocorrencias, int l, int k){
+    //Função de ordenação mergesort, que ordena vetores os quebrando em partes
     if (l < k){
         int m = l + (k - l) / 2;
         
@@ -79,9 +83,8 @@ void merge_sort(char **palavras, long*ocorrencias, int l, int k){
 }
 
 int main(){
-    long entradas;
-    scanf("%ld", &entradas);
-    
+    int entradas;
+    scanf("%d", &entradas);
 
     while(entradas > 0){
         scanf("\n");
@@ -100,7 +103,6 @@ int main(){
         }
 
         for(int i = 0; i<k; i++){
-            //fgets(palavras[i], tamanho, stdin);
             scanf(" %[^\n]", palavras[i]);
         }
 
@@ -108,12 +110,10 @@ int main(){
         merge_sort(palavras, ocorrencias, 0, k -1);
 
         for(int i = 0; i<k; i++){
-            printf("O DNA é: %s; com tamanho %ld\n", palavras[i], ocorrencias[i]);
-            //printf("A letra do DNA é: %c\n", palavras[i][i]);
+            printf("%s\n", palavras[i]);
         }
+        printf("\n");
 
         entradas --;
     }
-
-
 }

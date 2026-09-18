@@ -3,9 +3,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define max_palavras 1000
-#define max_caracteres 1200
-
 void remover_numeros(char p[]){
     //Ao encontrar qualquer número, o remove da palavra
     for(int j = 0; p[j] != '\0'; j++){
@@ -19,6 +16,7 @@ void remover_numeros(char p[]){
             }
         }
     }
+
 void remover_especiais(char p[]){
     //Ao achar qualquer caracter que não seja um número ou uma letra, a palavra é reescrita eliminando esse caracter
     for(int j = 0; p[j] != '\0'; j++){
@@ -60,7 +58,6 @@ void comeca_consoante(char p[], int posicao_final){
     p[posicao_final] = 'm';
     p[posicao_final + 1] = 'a';
     p[posicao_final + 2] = '\0';
-
 }
 
 void adicionar_sufixo(char p[], int n_sufixo){
@@ -77,7 +74,7 @@ void adicionar_sufixo(char p[], int n_sufixo){
 
 int main(){
     // Ler a frase_total, ver o tamanho dela e criar um vetor para a mesma
-    char frase_total[200000]; 
+    char frase_total[2000000]; 
 
     while (fgets(frase_total, sizeof(frase_total), stdin) != NULL){  //Lê até a quebra de linha ao digitar
         long long soma = 0;
@@ -107,7 +104,7 @@ int main(){
         //Enquanto a palavra existir (ser percorrida), ela passará por uma transformação para a linguagem "goat", passando pelas funções seguintes:
         while(palavra != NULL){
 
-            char p[200000]; 
+            char p[2000000]; 
             int j;
 
             for(j = 0; palavra[j] != '\0'; j++){

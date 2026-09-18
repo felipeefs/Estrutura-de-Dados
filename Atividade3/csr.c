@@ -17,10 +17,9 @@ int comparar_inteiros(const void *a, const void *b){
     }
     //Se as linhas forem iguais, ordena-se as colunas
     return e1 -> coluna - e2 -> coluna;
-
 }
 
-void realocar_vetorR(int *R, int k, int *L){
+void realocar_vetorR(int *R, int k, int *L, int i_max){
     //Preenche o vetor R a partir da ocorrencia das linhas da matriz (tal linhas que estão guardadas em L)
     R[0] = 0; //O vetor R sempre começa zerado
 
@@ -30,7 +29,7 @@ void realocar_vetorR(int *R, int k, int *L){
         if(L[f] == L[f+1] && (L[f]+1) == posicao && f < k -1){
             ocorrencia += 1;
         }
-        else if(L[f] != L[f+1] && (L[f]+1) == posicao && f < k-1){
+        else if(L[f] != L[f+1] && (L[f]+1) == posicao){
             R[posicao] = ocorrencia;
             ocorrencia += 1;
             posicao += 1;
@@ -38,10 +37,15 @@ void realocar_vetorR(int *R, int k, int *L){
         else{
             R[posicao] = ocorrencia - 1;
             posicao += 1;
-            //atual = L[f];
             f --;
         }
     }
+    //Caso as ultimas linhas sejam vazias elas são preenchidas
+    while (posicao < i_max + 1){
+        R[posicao] = ocorrencia -1;
+        posicao ++;
+    }
+    
 }
 
 int procurar_Nnulos(int *R, int i, int i_max){
@@ -50,19 +54,16 @@ int procurar_Nnulos(int *R, int i, int i_max){
         return (R[i+1] - R[i]); 
     else
         return 0;  
-
 }
 
 int procurar_coluna(int *R, int *C, int j, int i){
     //A partir dos valores de R, procura-se a ocorrência de j na lista das colunas (C), e devolve-se a posicção em que ele foi encontrado
     for(int f = R[i]; f <= (R[i+1] - 1); f++){
         if (C[f] == j){
-            printf("A coluna em C: %d. O j: %d\n", C[f], j);
             return f;
         }
     }
-    return -1; //Devolve-se um booleano False, caso contrário
-
+    return -1; //Devolve-se -1 para a condição na main ser analisada
 }
 
 int main(){
@@ -75,6 +76,7 @@ int main(){
     if(A == NULL|| C == NULL || L == NULL)
         return 1;
 
+    //Entradas
     for(int f = 0; f < k; f++){
         scanf(" %d %d %d", &L[f], &C[f], &A[f]);
  
@@ -99,46 +101,32 @@ int main(){
     free(temporaria);
 
     //Cria o vetor R, e a partir do vetor L ele é preenchido
-    int *R = malloc((i_max +1) * sizeof(int));
-    realocar_vetorR(R, k, L);
+    int *R = calloc((i_max +2), sizeof(int));
+    realocar_vetorR(R, k, L, i_max);
 
-
+    //Entradas de i e j, para serem procurados
     int i, j;
     while(scanf(" %d %d", &i ,&j) != EOF){
         if(i == -1 && j == -1)
             break;
-
+        
         int quantidade_deNumeros = procurar_Nnulos(R, i, i_max);
-        printf("A quantidade de numeros é: %d\n", quantidade_deNumeros);
         if(quantidade_deNumeros){
             int valor_j = procurar_coluna(R, C, j, i);
-            printf("O indice de j é %d\n", valor_j);
                 if(valor_j != -1){
-                    printf("%d\n", A[valor_j]);
+                    printf("(%d,%d) = %d\n",i, j, A[valor_j]);
                 }
-                else{ //Talvez isso de problema, pois vai que encontra na posição 0, e ele le como False
-                    printf("0\n");
+                else{ 
+                    printf("(%d,%d) = 0\n", i, j);
                 }
         }
 
         else{
-            printf(" %d\n", quantidade_deNumeros);
+            printf("(%d,%d) = %d\n",i, j, quantidade_deNumeros);
         }
-
     }
 
-
-    for(int f = 0; f < k; f++){
-        //printf("A na é %d, na posicao %d\n", A[f], f);
-        //printf("C na é %d, na posicao %d\n", C[f], f);
-        printf("L é igual a %d na posicao %d\n", L[f], f);
-    }
-    //printf("%d\n", i_max);
-
-    for(int f = 0; f < i_max + 2; f ++){
-        printf("R é igual a %d na posicao %d\n", R[f], f);
-    }
-
+    //Liberação de memória
     free(C);
     free(L);
     free(A);

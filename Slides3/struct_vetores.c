@@ -1,5 +1,5 @@
-#include <stdint.h>
-
+#include <stdio.h>
+#include <string.h>
 
 struct tarefa {
     char descricao[30];
@@ -19,4 +19,12 @@ int main(void) {
     P[1].idade = 51;
     strcpy(P[1].tarefas[0].descricao, "fazer lab 3");
     P[1].tarefas[0].duracao = 1;
-}
+
+
+    printf("O nome da segunda pessoa é: %s\n", P[1].nome);
+    printf("A idade da segunda pessoa é: %d\n", P[1].idade);
+
+    printf("A descrição da sua primeira tarefa é: %s\n", P[1].tarefas[0].descricao);
+    printf("A duração da sua primeira tarefa é: %d\n", P[1].tarefas[0].duracao);
+
+} 
