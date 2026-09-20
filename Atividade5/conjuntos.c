@@ -15,33 +15,39 @@ void criar_conjunto(){
 }
 
 void inserir_elementos(no **L, int j, int t){    
-    no *p = L[j];
     long c = 0;
-
     while(c<t){
+        no *p = L[j];
+        
         int numero;
         scanf(" %d", &numero);
         no* novo = malloc(sizeof(no));
         novo->elemento = numero;
 
-        //Adiciona todos os novos elementos no começo da lista, após o nó sentinela
-        
+        if(p->prox == NULL || numero < p->prox->elemento){ //Adiciona o primeiro elemento
+            
+            novo->prox = p->prox;
+            p->prox = novo;
+        }
 
-        novo->prox = p->prox;
-        p->prox = novo;
-    
-
-
+        else if(numero > p->prox->elemento){
+            while (p->prox != NULL && numero > p->prox->elemento){
+                p = p->prox;
+            }
+            novo->prox = p->prox;
+            p->prox = novo;
+        }
         c++;
     }
 }
+
 
 
 void imprimir_crescente(no **L, int i){
     L[i] = L[i]->prox;
 
     while(L[i] != NULL){
-        printf("%d", L[i] -> elemento);
+        printf("%d\n ", L[i] -> elemento);
         L[i] = L[i] -> prox;
     }
 
@@ -75,6 +81,7 @@ int main(){
         case 'p':
             int i;
             scanf(" %d", &i);
+            imprimir_crescente(L, i);
 
             break;
         
