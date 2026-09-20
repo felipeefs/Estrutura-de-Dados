@@ -8,14 +8,14 @@ struct no{
 
 typedef struct no no;
 
-void criar_conjunto(no **L, int k){
+void criar_conjunto(no **L, int i){
     //Por enquanto não faz nada, porque todos os itens da lista já estão criados, porém ele deve verificar se um conjunto já existe na posição da lista, e apaga-lo caso já exista
-    if(L[k] != malloc(sizeof(no))){
-        L[k] = malloc(sizeof(no));
-        L[k] -> prox = NULL;
+    if(L[i] != malloc(sizeof(no))){
+        L[i] = malloc(sizeof(no));
+        L[i] -> prox = NULL;
     }
     else
-        free(L[k]);
+        free(L[i]);
 }
 
 void inserir_elementos(no **L, int j, int t){    
@@ -44,6 +44,28 @@ void inserir_elementos(no **L, int j, int t){
             p->prox = novo;
         }
         c++;
+    }
+}
+
+void remover_elementos(no **L, int j, int t){
+
+    int c =0;
+    while (c < t){
+        int numero;
+        scanf(" %d", &numero);
+
+        no *p = L[j];
+
+        while(p->prox != NULL){
+            if(numero == p->prox->elemento){
+                no* guardo = p -> prox;
+                p->prox = p->prox->prox;
+                free(guardo);
+                break;
+            }
+            p = p-> prox;
+        }
+        c ++;
     }
 }
 
@@ -79,24 +101,33 @@ int main(){
             break;
     
         switch (operacao){
-        case 'c':
-            int k;
-            scanf(" %d", &k);
-            criar_conjunto(L, k);
+        case 'c':{
+            int i;
+            scanf(" %d", &i);
+            criar_conjunto(L, i);
             break;
+        }
 
-        case 'i':
+        case 'i':{
             int j, t;
             scanf(" %d %d", &j, &t);
             inserir_elementos(L, j, t);
             break;
+        }
 
-        case 'p':
+        case 'p':{
             int i;
             scanf(" %d", &i);
             imprimir_crescente(L, i);
             break;
-        
+        }
+
+        case 'r':{
+            int j, t;
+            scanf(" %d %d", &j, &t);
+            remover_elementos(L, j, t);
+            break;
+        }
         default:
             break;
         }
