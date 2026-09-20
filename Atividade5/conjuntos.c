@@ -180,7 +180,7 @@ void imprimir_crescente(no **L, int i){
     no *p = L[i]; //Apontador p apontando para o mesmo lugar que o sentinela
     p = p->prox;
 
-    printf("{");
+    printf("C%d = {", i);
     while(p != NULL){
         if(p -> prox == NULL){
             printf("%d", p -> elemento);
@@ -190,7 +190,7 @@ void imprimir_crescente(no **L, int i){
         p = p -> prox; //Ele passa para frente, mas depois precisa voltar para o que era antes
     }
     
-    printf("}");
+    printf("}\n");
 }
 
 void imprimir_unico(no **L, int i, int x){
@@ -207,7 +207,7 @@ void imprimir_unico(no **L, int i, int x){
         p = p->prox;
     }
     if(booleano)
-        printf("%d nao esta em C%d", x, i);
+        printf("%d nao esta em C%d\n", x, i);
 
 }
 
@@ -216,8 +216,9 @@ int main(){
    
     char operacao;
     while((scanf(" %c", &operacao) != EOF)){
-        if(operacao == 't')
+        if(operacao == 't'){
             break;
+        }
     
         switch (operacao){
         case 'c':{
