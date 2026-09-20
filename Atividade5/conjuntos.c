@@ -23,7 +23,7 @@ void unir_conjuntos(no **L, int i, int j, int k){
     p_j = p_j->prox;
 
     no* p_i = L[i];
- 
+    //Loop para copiar todos os elementos de L[j] em L[i]
     while(p_j != NULL){
         no *novo = malloc(sizeof(no));
         novo->elemento = p_j->elemento;
@@ -34,7 +34,31 @@ void unir_conjuntos(no **L, int i, int j, int k){
         p_i = p_i -> prox;
         p_j = p_j -> prox;
     }
-    
+
+    //Loop para adicionar todos os elementos de L[k] que ainda não estão em L[i]
+    no *p_k = L[k];
+    p_k = p_k -> prox;
+
+    //no* p_i = L[i];
+    while(p_k != NULL){
+        no *novo = malloc(sizeof(no));
+        novo->elemento = p_k->elemento;
+
+        if(novo->elemento < p_i -> prox->elemento){
+            novo->prox = p_i->prox;
+            p_i ->prox = novo;
+        }
+        else{
+            while(novo->elemento > p_i->prox->elemento){
+                p_i = p_i -> prox;
+            }
+            novo->prox = p_i->prox;
+            p_i ->prox = novo;
+
+        }
+    }
+
+
 }
 
 void inserir_elementos(no **L, int j, int t){    
