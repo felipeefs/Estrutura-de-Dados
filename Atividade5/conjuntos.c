@@ -53,10 +53,75 @@ void unir_conjuntos(no **L, int i, int j, int k){
             novo->prox = p_i -> prox;
             p_i -> prox = novo;
         }
-        
         p_k = p_k -> prox;
         p_i = L[i];
     }
+}
+
+void intersectar_conjuntos(no **L, int i, int j, int k){
+    no *p_j = L[j];
+    no *p_k = L[k];
+    no* p_i = L[i];
+
+    p_j = p_j->prox;
+    while (p_j != NULL){
+
+        p_k = L[k];
+        p_k = p_k -> prox;
+
+        while(p_k !=NULL){
+            if(p_j->elemento == p_k->elemento){
+                no *novo = malloc(sizeof(no));
+                novo->elemento = p_j -> elemento;
+
+                novo->prox = p_i -> prox;
+                p_i -> prox = novo;
+
+                p_i = p_i -> prox; //p_i avança para ficar na ordem crescente 
+
+                break;
+            }
+            p_k = p_k -> prox;
+        }
+        p_j = p_j -> prox;
+    }
+}
+
+void diferenciar_conjuntos(no **L, int i, int j, int k){
+    no *p_j = L[j];
+    no *p_k = L[k];
+    no* p_i = L[i];
+    
+    p_j = p_j->prox;
+    while (p_j != NULL){
+        int booleano = 0;
+
+        p_k = L[k];
+        p_k = p_k -> prox;
+
+        while(p_k !=NULL){
+            if(p_j->elemento == p_k->elemento){
+                booleano = 0;
+                break;
+            }
+            booleano = 1;
+            p_k = p_k -> prox;
+        }
+
+        if(booleano){
+            no *novo = malloc(sizeof(no));
+            novo->elemento = p_j -> elemento;
+
+            novo->prox = p_i -> prox;
+            p_i -> prox = novo;
+
+            p_i = p_i -> prox; //p_i avança para ficar na ordem crescente 
+
+
+        }
+        p_j = p_j -> prox;
+    }
+
 
 }
 
@@ -168,7 +233,22 @@ int main(){
             criar_conjunto(L, i);
             unir_conjuntos(L, i, j, k);
             break;
-            
+        }
+
+        case 'n':{
+            int i, j, k;
+            scanf(" %d %d %d", &i, &j, &k);
+            criar_conjunto(L, i);
+            intersectar_conjuntos(L, i, j, k);
+            break;
+        }
+
+        case 'm':{
+            int i, j, k;
+            scanf(" %d %d %d", &i, &j, &k);
+            criar_conjunto(L, i);
+            diferenciar_conjuntos(L, i, j, k);
+            break;
         }
 
         case 'i':{
