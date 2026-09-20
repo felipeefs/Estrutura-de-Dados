@@ -8,13 +8,19 @@ struct no{
 
 typedef struct no no;
 
-
-void criar_conjunto(){
+void criar_conjunto(no **L, int k){
     //Por enquanto não faz nada, porque todos os itens da lista já estão criados, porém ele deve verificar se um conjunto já existe na posição da lista, e apaga-lo caso já exista
-
+    if(L[k] != malloc(sizeof(no))){
+        L[k] = malloc(sizeof(no));
+        L[k] -> prox = NULL;
+    }
+    else
+        free(L[k]);
 }
 
 void inserir_elementos(no **L, int j, int t){    
+    //Insere elementos de forma crescente na lista encadeada de indice j
+
     long c = 0;
     while(c<t){
         no *p = L[j];
@@ -50,10 +56,8 @@ void imprimir_crescente(no **L, int i){
             printf("%d", L[i] -> elemento);
             break;
         }
-        
         printf("%d, ", L[i] -> elemento);
         L[i] = L[i] -> prox;
-
     }
     printf("}");
 }
@@ -62,11 +66,13 @@ int main(){
     no** L= malloc(128 * sizeof(no*)); //Uma lista que terá 128 conjuntos
 
     //Para cada item da lista, recebe uma lista encadeada
+    /*
     for(int i = 0; i< 128; i++){
         L[i] = malloc(sizeof(no));
         L[i] -> prox = NULL;
     }
-
+    */
+   
     char operacao;
     while((scanf(" %c", &operacao) != EOF)){
         if(operacao == 't')
@@ -74,8 +80,11 @@ int main(){
     
         switch (operacao){
         case 'c':
-            criar_conjunto();
+            int k;
+            scanf(" %d", &k);
+            criar_conjunto(L, k);
             break;
+
         case 'i':
             int j, t;
             scanf(" %d %d", &j, &t);
@@ -86,7 +95,6 @@ int main(){
             int i;
             scanf(" %d", &i);
             imprimir_crescente(L, i);
-
             break;
         
         default:
