@@ -24,13 +24,13 @@ void inserir_elementos(no **L, int j, int t){
         no* novo = malloc(sizeof(no));
         novo->elemento = numero;
 
-        if(p->prox == NULL || numero < p->prox->elemento){ //Adiciona o primeiro elemento
-            
+        //Adiciona todos os elementos em ordem crescente
+        if(p->prox == NULL || numero < p->prox->elemento){ //Adiciona o elemento na primeira posição caso ele seja menor ou o próximo seja um NULL
             novo->prox = p->prox;
             p->prox = novo;
         }
 
-        else if(numero > p->prox->elemento){
+        else if(numero > p->prox->elemento){ //Adiciona os próximos, maiores elementos
             while (p->prox != NULL && numero > p->prox->elemento){
                 p = p->prox;
             }
@@ -41,17 +41,21 @@ void inserir_elementos(no **L, int j, int t){
     }
 }
 
-
-
 void imprimir_crescente(no **L, int i){
     L[i] = L[i]->prox;
 
+    printf("{");
     while(L[i] != NULL){
-        printf("%d\n ", L[i] -> elemento);
+        if(L[i] -> prox == NULL){
+            printf("%d", L[i] -> elemento);
+            break;
+        }
+        
+        printf("%d, ", L[i] -> elemento);
         L[i] = L[i] -> prox;
+
     }
-
-
+    printf("}");
 }
 
 int main(){
