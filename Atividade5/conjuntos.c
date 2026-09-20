@@ -70,30 +70,43 @@ void remover_elementos(no **L, int j, int t){
 }
 
 void imprimir_crescente(no **L, int i){
-    L[i] = L[i]->prox;
+
+    no *p = L[i]; //Apontador p apontando para o mesmo lugar que o sentinela
+    p = p->prox;
 
     printf("{");
-    while(L[i] != NULL){
-        if(L[i] -> prox == NULL){
-            printf("%d", L[i] -> elemento);
+    while(p != NULL){
+        if(p -> prox == NULL){
+            printf("%d", p -> elemento);
             break;
         }
-        printf("%d, ", L[i] -> elemento);
-        L[i] = L[i] -> prox;
+        printf("%d, ", p -> elemento);
+        p = p -> prox; //Ele passa para frente, mas depois precisa voltar para o que era antes
     }
+    
     printf("}");
+}
+
+void imprimir_unico(no **L, int i, int x){
+    no *p = L[i];
+    p = p->prox;
+
+    int booleano = 1; 
+    while(p->prox != NULL){
+        if(x == p->prox->elemento){
+            printf("%d esta em C%d\n", x, i);
+            booleano = 0;
+            break;
+        }
+        p = p->prox;
+    }
+    if(booleano)
+        printf("%d nao esta em C%d", x, i);
+
 }
 
 int main(){
     no** L= malloc(128 * sizeof(no*)); //Uma lista que terá 128 conjuntos
-
-    //Para cada item da lista, recebe uma lista encadeada
-    /*
-    for(int i = 0; i< 128; i++){
-        L[i] = malloc(sizeof(no));
-        L[i] -> prox = NULL;
-    }
-    */
    
     char operacao;
     while((scanf(" %c", &operacao) != EOF)){
@@ -128,6 +141,14 @@ int main(){
             remover_elementos(L, j, t);
             break;
         }
+        
+        case 'e':{
+            int i, x;
+            scanf(" %d %d", &i, &x);
+            imprimir_unico(L, i, x);
+            break;
+        }
+
         default:
             break;
         }
