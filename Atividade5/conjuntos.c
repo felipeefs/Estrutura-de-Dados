@@ -41,23 +41,17 @@ void unir_conjuntos(no **L, int i, int j, int k){
 
     //no* p_i = L[i];
     while(p_k != NULL){
-        no *novo = malloc(sizeof(no));
-        novo->elemento = p_k->elemento;
+        if(p_i->elemento < p_k->elemento && p_k->elemento < p_i->prox->elemento && p_k->elemento != p_i->prox->elemento){
 
-        if(novo->elemento < p_i -> prox->elemento){
-            novo->prox = p_i->prox;
-            p_i ->prox = novo;
+            no *novo = malloc(sizeof(no));
+            novo->elemento = p_k ->elemento;
+            
+            novo->prox = p_i -> prox;
+            p_i -> prox = novo;
         }
-        else{
-            while(novo->elemento > p_i->prox->elemento){
-                p_i = p_i -> prox;
-            }
-            novo->prox = p_i->prox;
-            p_i ->prox = novo;
-
-        }
+        p_k = p_k -> prox;
+        //p_i = p_i -> prox;
     }
-
 
 }
 
