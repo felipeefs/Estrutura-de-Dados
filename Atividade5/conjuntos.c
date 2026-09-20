@@ -18,9 +18,27 @@ void criar_conjunto(no **L, int i){
         free(L[i]);
 }
 
+void unir_conjuntos(no **L, int i, int j, int k){
+    no *p_j = L[j];
+    p_j = p_j->prox;
+
+    no* p_i = L[i];
+ 
+    while(p_j != NULL){
+        no *novo = malloc(sizeof(no));
+        novo->elemento = p_j->elemento;
+        
+        novo->prox = p_i -> prox;
+        p_i -> prox = novo;
+
+        p_i = p_i -> prox;
+        p_j = p_j -> prox;
+    }
+    
+}
+
 void inserir_elementos(no **L, int j, int t){    
     //Insere elementos de forma crescente na lista encadeada de indice j
-
     long c = 0;
     while(c<t){
         no *p = L[j];
@@ -119,6 +137,15 @@ int main(){
             scanf(" %d", &i);
             criar_conjunto(L, i);
             break;
+        }
+
+        case 'u':{
+            int i, j, k;
+            scanf(" %d %d %d", &i, &j, &k);
+            criar_conjunto(L, i);
+            unir_conjuntos(L, i, j, k);
+            break;
+            
         }
 
         case 'i':{
