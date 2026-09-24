@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Criação do struct no, que representa cada nó da lista encadeada
 struct no{
     int elemento;
     struct no *prox;
@@ -9,16 +10,24 @@ struct no{
 typedef struct no no;
 
 void criar_conjunto(no **L, int i){
-    //Por enquanto não faz nada, porque todos os itens da lista já estão criados, porém ele deve verificar se um conjunto já existe na posição da lista, e apaga-lo caso já exista
-    if(L[i] != malloc(sizeof(no))){
+    //Verifica se a posição da lista está vazia, se sim, pode-se criar uma lista encadeada com um nó sentinela na mesma. Se não a lista é envaziada nó por nó
+    if(L[i] == NULL){
         L[i] = malloc(sizeof(no));
         L[i] -> prox = NULL;
     }
-    else
-        free(L[i]);
+    else{
+        while(L[i] != NULL){
+            no *p = L[i];
+            L[i] = L[i]->prox;
+            free(p);
+        }
+        L[i] = malloc(sizeof(no));
+        L[i] -> prox = NULL;
+    }
 }
 
 void unir_conjuntos(no **L, int i, int j, int k){
+    //Primeiro copia todos os elementos de L[j] para L[i] e depois adiciona os elementos de L[k] que ainda não estão na lista
     no *p_j = L[j];
     p_j = p_j->prox;
 
@@ -59,6 +68,7 @@ void unir_conjuntos(no **L, int i, int j, int k){
 }
 
 void intersectar_conjuntos(no **L, int i, int j, int k){
+    //Fixa um elemento da lista L[j] e percorre a lista L[k] e caso os elementos forem iguais, são adicionados na lista L[i]
     no *p_j = L[j];
     no *p_k = L[k];
     no* p_i = L[i];
@@ -88,13 +98,14 @@ void intersectar_conjuntos(no **L, int i, int j, int k){
 }
 
 void diferenciar_conjuntos(no **L, int i, int j, int k){
+    //Fixa um elemento da lista L[j] e caso ache elementos iguais encerra-se o loop, visto que só irá inserir a diferença
     no *p_j = L[j];
     no *p_k = L[k];
     no* p_i = L[i];
     
     p_j = p_j->prox;
     while (p_j != NULL){
-        int booleano = 0;
+        int booleano = 1;
 
         p_k = L[k];
         p_k = p_k -> prox;
@@ -104,7 +115,6 @@ void diferenciar_conjuntos(no **L, int i, int j, int k){
                 booleano = 0;
                 break;
             }
-            booleano = 1;
             p_k = p_k -> prox;
         }
 
@@ -121,8 +131,6 @@ void diferenciar_conjuntos(no **L, int i, int j, int k){
         }
         p_j = p_j -> prox;
     }
-
-
 }
 
 void inserir_elementos(no **L, int j, int t){    
@@ -146,15 +154,26 @@ void inserir_elementos(no **L, int j, int t){
             while (p->prox != NULL && numero > p->prox->elemento){
                 p = p->prox;
             }
-            novo->prox = p->prox;
-            p->prox = novo;
+
+            if(p->prox !=NULL && numero == p->prox->elemento){
+                free(novo);
+            }
+
+            else{
+                novo->prox = p->prox;
+                p->prox = novo;
+            }
         }
+
+        else
+            free(novo);
+
         c++;
     }
 }
 
 void remover_elementos(no **L, int j, int t){
-
+    //Remove elementos os guardando em uma variação temporária guardo, que é liberada da memória após utilização
     int c =0;
     while (c < t){
         int numero;
@@ -176,8 +195,8 @@ void remover_elementos(no **L, int j, int t){
 }
 
 void imprimir_crescente(no **L, int i){
-
-    no *p = L[i]; //Apontador p apontando para o mesmo lugar que o sentinela
+    //Imprime os números na ordem crescente, ou seja, na ordem em que já estão, visto que já foram inseridos em ordem crescente
+    no *p = L[i]; 
     p = p->prox;
 
     printf("C%d = {", i);
@@ -187,36 +206,40 @@ void imprimir_crescente(no **L, int i){
             break;
         }
         printf("%d, ", p -> elemento);
-        p = p -> prox; //Ele passa para frente, mas depois precisa voltar para o que era antes
+        p = p -> prox; 
     }
     
     printf("}\n");
 }
 
 void imprimir_unico(no **L, int i, int x){
-    no *p = L[i];
-    p = p->prox;
+    //Procura o elemento x, e quando encontrado é impresso
+    no *p = L[i] -> prox;
 
-    int booleano = 1; 
-    while(p->prox != NULL){
-        if(x == p->prox->elemento){
+    while(p != NULL){
+        if(x == p->elemento){
             printf("%d esta em C%d\n", x, i);
-            booleano = 0;
-            break;
+            return;
         }
         p = p->prox;
     }
-    if(booleano)
-        printf("%d nao esta em C%d\n", x, i);
-
+    printf("%d nao esta em C%d\n", x, i);
 }
 
 int main(){
-    no** L= malloc(128 * sizeof(no*)); //Uma lista que terá 128 conjuntos
+    no** L= calloc(128, sizeof(no*)); //Uma lista dinâmica que tem 128 conjuntos
    
     char operacao;
     while((scanf(" %c", &operacao) != EOF)){
         if(operacao == 't'){
+            for(int i = 0; i < 128; i++){
+                while(L[i] != NULL){
+                    no *p = L[i];
+                    L[i] = L[i] -> prox;
+                    free(p);
+                }
+            }
+            free(L);
             break;
         }
     
