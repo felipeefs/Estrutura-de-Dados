@@ -2,9 +2,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+
 
 #include "dequef.h"
-
 
 /**
    Create an empty deque of floats.
@@ -38,7 +39,6 @@ void df_free(dequef* D) {
    free(D);
 }
 
-
 /**
    The size of the deque.
 **/
@@ -46,6 +46,39 @@ long df_size(dequef* D) {
    return D-> size;
 }
 
+
+int aumentar_array(dequef *D){
+   //Redimensionamento para a lista cheia
+   if(D->size >= D->cap){ 
+      int novo_r = D->factor * D->cap;
+      if (novo_r < D->mincap){
+         return 0;
+      }
+      float * novo_array = (novo_r * sizeof(float));
+      for(int i = 0; i < D->size; i++){
+         novo_array[i] = D->data[i];
+      }
+      D->data = novo_array;
+   }
+   return 1;
+}
+
+int diminuir_array(dequef *D){
+   //Redimensionamento para  **diminuir a lista
+   if(D->size <= (D->size/pow(D->factor, 2))){
+      int novo_r = D->size / D->factor;
+      if(novo_r < D->mincap)
+         return 0;
+      if(novo_r < D->mincap)
+         novo_r = D->mincap;
+      float * novo_array = (novo_r * sizeof(float));
+      for(int i = 0; i < D->size; i++){
+         novo_array[i] = D->data[i];
+      }
+      D->data = novo_array;
+   }
+   return 1;
+}
 
 
 /**
@@ -58,9 +91,14 @@ long df_size(dequef* D) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_push(dequef* D, float x) {
-   
-   
-   
+    return aumentar_array(D);
+
+    int pos;
+
+    pos = (D->first + D->size-1) % D->cap;
+    D->data[pos] = x;
+
+    (D->size) ++;
 }
 
 
@@ -74,9 +112,23 @@ int df_push(dequef* D, float x) {
    the array size remains unchanged.
 
    It returns the float removed from D.
-   What happens if D is empty before the call?
+   ********What happens if D is empty before the call?
 **/
 float df_pop(dequef* D) {
+   if(D->size == 0)
+      return 0;
+
+   diminuir_array(D);
+   
+   int pos;
+   float rem;
+
+   pos = (D->first + D->size-1) % D->cap;
+   rem = D->data[pos];
+
+   (D->size) --;
+
+   return rem;
 }
 
 
