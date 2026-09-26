@@ -36,6 +36,7 @@ dequef* df_alloc(long capacity, double factor) {
   Release a dequef and its data.
 **/
 void df_free(dequef* D) {
+   free(D->data);
    free(D);
 }
 
@@ -50,34 +51,35 @@ long df_size(dequef* D) {
 int aumentar_array(dequef *D){
    //Redimensionamento para a lista cheia
    if(D->size >= D->cap){ 
-      int novo_r = D->factor * D->cap;
+      long novo_r = ((long)D->factor) * D->cap;
       if (novo_r < D->mincap){
          return 0;
       }
-      float * novo_array = (novo_r * sizeof(float));
+      float * novo_array = malloc(novo_r * sizeof(float));
       for(int i = 0; i < D->size; i++){
          novo_array[i] = D->data[i];
       }
       D->data = novo_array;
+      D->cap = novo_r;
+
    }
-   return 1;
 }
 
 int diminuir_array(dequef *D){
    //Redimensionamento para  **diminuir a lista
    if(D->size <= (D->size/pow(D->factor, 2))){
-      int novo_r = D->size / D->factor;
+      long novo_r = (long)D->cap / D->factor;
       if(novo_r < D->mincap)
          return 0;
       if(novo_r < D->mincap)
          novo_r = D->mincap;
-      float * novo_array = (novo_r * sizeof(float));
+      float * novo_array = malloc(novo_r * sizeof(float));
       for(int i = 0; i < D->size; i++){
          novo_array[i] = D->data[i];
       }
       D->data = novo_array;
+      D->cap = novo_r;
    }
-   return 1;
 }
 
 
@@ -91,14 +93,18 @@ int diminuir_array(dequef *D){
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_push(dequef* D, float x) {
-    return aumentar_array(D);
+   aumentar_array(D);
 
-    int pos;
+   int pos;
 
-    pos = (D->first + D->size-1) % D->cap;
-    D->data[pos] = x;
+   pos = (D->first + D->size) % D->cap;
+   D->data[pos] = x;
 
-    (D->size) ++;
+   (D->size)++;
+
+   return 1;
+
+
 }
 
 
@@ -189,5 +195,8 @@ void df_set(dequef* D, long i, float x) {
    Print the elements of D in a single line.
 **/
 void df_print(dequef* D) {
+   for(int i = 0; i < D->size; i++){
+      printf("%f\n", D->data[i]);
+    }
 
 }
