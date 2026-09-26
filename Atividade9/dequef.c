@@ -198,19 +198,10 @@ float df_eject(dequef* D) {
    If i is not in [0,|D|-1]] what happens then?
 **/
 float df_get(dequef* D, long i) {
-   // printf("%.1f\n",D->data[-1]);
-   // for(int i = 0; i < D->cap; i ++){
-   //    printf("%.1f ", D->data[i]);
-   // }
-
-//    if(i >= 0 && i < D->cap){
-//       printf("%.1f\n",D->data[i]);
-//       return D->data[i];
-//    }
    int printados = 0;
    for(int j = D->first; j < (D->cap); j++){
       if(printados == i){
-         printf("%.1f", D->data[j]);
+         printf("D[%ld] == %.1f\n",i, D->data[j]);
          return D->data[j];
       }
       printados ++;
@@ -218,19 +209,13 @@ float df_get(dequef* D, long i) {
    if (D->first != 0){
       for(int j = 0; printados < D->size; j++){
          if(printados == i){
-            printf("%.1f", D->data[j]);
+            printf("D[%ld] == %.1f\n",i, D->data[j]);
             return D->data[j];
          }
          printados ++;
       }
    }
-
-   
-
-
 }
-
-
 
 /**
    Set D[i] to x.
@@ -249,15 +234,21 @@ void df_set(dequef* D, long i, float x) {
 **/
 void df_print(dequef* D) {
    // printf("%ld %ld\n", D->cap, D->first);
-   int printados = 0;
-   for(int i = D->first; i < (D->cap); i++){
-      printf("%.1f\n", D->data[i]);
-      printados ++;
-    }
-   if (D->first != 0){
-      for(int j = 0; printados < D->size; j++){
-         printf("%.1f\n", D->data[j]);
+   if(df_size == 0){
+      printf("d (%ld):", df_size(D));
+   }
+
+   else{
+      int printados = 0;
+      for(int i = D->first; i < (D->cap); i++){
+         printf("%.1f\n", D->data[i]);
          printados ++;
+      }
+      if (D->first != 0){
+         for(int j = 0; printados < D->size; j++){
+            printf("%.1f\n", D->data[j]);
+            printados ++;
+         }
       }
    }
 
