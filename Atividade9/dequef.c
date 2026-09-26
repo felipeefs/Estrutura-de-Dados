@@ -61,7 +61,6 @@ int aumentar_array(dequef *D){
       }
       D->data = novo_array;
       D->cap = novo_r;
-
    }
 }
 
@@ -70,6 +69,7 @@ int diminuir_array(dequef *D){
    if(D->size <= (D->size/pow(D->factor, 2))){
       long novo_r = (long)D->cap / D->factor;
       if(novo_r < D->mincap)
+         printf("Unable to resize\n");
          return 0;
       if(novo_r < D->mincap)
          novo_r = D->mincap;
@@ -175,6 +175,20 @@ int df_inject(dequef* D, float x) {
    What happens if D is empty before the call?
 **/
 float df_eject(dequef* D) {
+   diminuir_array(D);
+
+   float rem;
+   rem = D->data[D->first];
+
+   if(D->first == D->cap - 1){
+      D->first = 0;
+   }
+   else{
+      (D->first) ++;
+   }
+   (D->size) --;
+
+   return rem;
 }
 
 
@@ -185,6 +199,9 @@ float df_eject(dequef* D) {
    If i is not in [0,|D|-1]] what happens then?
 **/
 float df_get(dequef* D, long i) {
+   if(i > 0 && i < D->cap - 1){
+      return D->data[i];
+   }
 }
 
 
@@ -195,15 +212,17 @@ float df_get(dequef* D, long i) {
    If i is not in [0,|D|-1]] what happens then?
 **/
 void df_set(dequef* D, long i, float x) {
+   if(i > 0 && i < D->cap - 1){
+      D->data[i] = x;
+   }
 }
-
 
 
 /**
    Print the elements of D in a single line.
 **/
 void df_print(dequef* D) {
-   printf("%ld %ld\n", D->cap, D->first);
+   // printf("%ld %ld\n", D->cap, D->first);
    int printados = 0;
    for(int i = D->first; i < (D->cap); i++){
       printf("%f\n", D->data[i]);
