@@ -103,8 +103,6 @@ int df_push(dequef* D, float x) {
    (D->size)++;
 
    return 1;
-
-
 }
 
 
@@ -149,7 +147,17 @@ float df_pop(dequef* D) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_inject(dequef* D, float x) {
+   aumentar_array(D);
 
+   if(D->first == 0)
+      D->first = D->cap - 1; //Como a lista é circular, e o ex primeiro ocupa a posição 0, o primeiro passa a ficar ao final do vetor
+   else
+      (D->first) --;
+   
+   D->data[D->first] = x;
+   D->size ++;
+
+   return 1;
 }
 
 
@@ -195,8 +203,17 @@ void df_set(dequef* D, long i, float x) {
    Print the elements of D in a single line.
 **/
 void df_print(dequef* D) {
-   for(int i = 0; i < D->size; i++){
+   printf("%ld %ld\n", D->cap, D->first);
+   int printados = 0;
+   for(int i = D->first; i < (D->cap); i++){
       printf("%f\n", D->data[i]);
+      printados ++;
     }
+   if (D->first != 0){
+      for(int j = 0; printados < D->size; j++){
+         printf("%f\n", D->data[j]);
+         printados ++;
+      }
+   }
 
 }
