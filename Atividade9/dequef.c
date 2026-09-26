@@ -201,7 +201,6 @@ float df_get(dequef* D, long i) {
    int printados = 0;
    for(int j = D->first; j < (D->cap); j++){
       if(printados == i){
-         printf("D[%ld] == %.1f\n",i, D->data[j]);
          return D->data[j];
       }
       printados ++;
@@ -209,7 +208,6 @@ float df_get(dequef* D, long i) {
    if (D->first != 0){
       for(int j = 0; printados < D->size; j++){
          if(printados == i){
-            printf("D[%ld] == %.1f\n",i, D->data[j]);
             return D->data[j];
          }
          printados ++;
@@ -234,7 +232,7 @@ void df_set(dequef* D, long i, float x) {
 **/
 void df_print(dequef* D) {
    // printf("%ld %ld\n", D->cap, D->first);
-   if(df_size == 0){
+   if(df_size(D) == 0){
       printf("d (%ld):", df_size(D));
    }
 
