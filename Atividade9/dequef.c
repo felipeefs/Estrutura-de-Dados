@@ -56,7 +56,7 @@ long df_size(dequef* D) {
 int aumentar_array(dequef *D){
    //Redimensionamento para a lista cheia
    if(D->size >= D->cap){ 
-      long novo_r = (long)(D->factor * D->cap);
+      long novo_r = (long)(D->factor * D->cap + 0.5);
       if (novo_r <= D->cap){
          novo_r = D->cap + 1;
       }
@@ -83,10 +83,13 @@ int diminuir_array(dequef *D){
       return 1;
    
    if(D->size <= (D->cap/(D->factor * D->factor))){
-      long novo_r = (long)(D->cap / D->factor);
+      long novo_r = (long)(D->cap / D->factor + 0.5);
       if(novo_r < D->mincap){
          novo_r = D->mincap;
       }
+      if(novo_r < D->size)
+         novo_r = D->size;
+
       if(novo_r == D->cap)
          return 1;
 
@@ -256,18 +259,21 @@ void df_set(dequef* D, long i, float x) {
    Print the elements of D in a single line.
 **/
 void df_print(dequef* D) {
-   // printf("%ld %ld\n", D->cap, D->first);
    if(df_size(D) == 0){
       printf("deque (%ld):", df_size(D));
    }
 
    else{
-      printf("deque (%ld):", D->size);
+      printf("deque (%ld): ", D->size);
 
       for(long i = 0; i< D->size; i++){
          long indice = (D->first + i) % D->cap;
-         printf(" %.1f", D->data[indice]);
+         printf("%.1f ", D->data[indice]);
       }
    }
    printf("\n");
+
+   
+   
+   
 }
