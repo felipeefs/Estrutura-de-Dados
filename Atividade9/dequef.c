@@ -2,7 +2,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
 
 #include "dequef.h"
@@ -41,8 +40,10 @@ dequef* df_alloc(long capacity, double factor) {
   Release a dequef and its data.
 **/
 void df_free(dequef* D) {
-   free(D->data);
-   free(D);
+   if(D!=NULL){
+      free(D->data);
+      free(D);
+   }
 }
 
 /**
@@ -52,13 +53,12 @@ long df_size(dequef* D) {
    return D->size;
 }
 
-
 int aumentar_array(dequef *D){
    //Redimensionamento para a lista cheia
    if(D->size >= D->cap){ 
       long novo_r = (long)(D->factor * D->cap);
-      if (novo_r < D->mincap){
-         return 0;
+      if (novo_r <= D->cap){
+         novo_r = D->cap + 1;
       }
       float * novo_array = malloc(novo_r * sizeof(float));
       if(novo_array == NULL){
@@ -79,11 +79,17 @@ int aumentar_array(dequef *D){
 
 int diminuir_array(dequef *D){
    //Redimensionamento para  **diminuir a lista
-   if(D->size <= (D->cap/pow(D->factor, 2))){
+   if(D->cap <= D->mincap)
+      return 1;
+   
+   if(D->size <= (D->cap/(D->factor * D->factor))){
       long novo_r = (long)(D->cap / D->factor);
       if(novo_r < D->mincap){
          novo_r = D->mincap;
       }
+      if(novo_r == D->cap)
+         return 1;
+
       float * novo_array = malloc(novo_r * sizeof(float));
       if(novo_array == NULL)
          return 0;
@@ -112,9 +118,10 @@ int diminuir_array(dequef *D){
 **/
 int df_push(dequef* D, float x) {
    int verdadeiro = aumentar_array(D);
+  
    if(verdadeiro){
 
-      int pos;
+      long pos;
 
       pos = (D->first + D->size) % D->cap;
       D->data[pos] = x;
@@ -144,7 +151,7 @@ float df_pop(dequef* D) {
       return 0;
 
       
-   int pos;
+   long pos;
    float rem;
 
    pos = (D->first + D->size-1) % D->cap;
@@ -169,20 +176,15 @@ float df_pop(dequef* D) {
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
 int df_inject(dequef* D, float x) {
-   int verdadeiro = aumentar_array(D);
-   if(verdadeiro){
+   if (D == NULL || !aumentar_array(D)) {
+         return 0;
+      }
 
-      if(D->first == 0)
-         D->first = D->cap - 1; //Como a lista é circular, e o ex primeiro ocupa a posição 0, o primeiro passa a ficar ao final do vetor
-      else
-         (D->first) --;
-      
+      D->first = (D->first - 1 + D->cap) % D->cap;
       D->data[D->first] = x;
-      (D->size)++;
+      D->size++;
 
-   }
-   return verdadeiro;
-
+      return 1;
 }
 
 
@@ -227,10 +229,12 @@ float df_eject(dequef* D) {
    If i is not in [0,|D|-1]] what happens then?
 **/
 float df_get(dequef* D, long i) {
+   if (D == NULL || i < 0 || i >= D->size) {
+      return 0.0f;
+   }
+   
    long indice = (D->first + i) % D->cap;
    return D->data[indice];
-
-   return 0.0;
 }
 
 /**
@@ -239,6 +243,10 @@ float df_get(dequef* D, long i) {
    If i is not in [0,|D|-1]] what happens then?
 **/
 void df_set(dequef* D, long i, float x) {
+   if (D == NULL || i < 0 || i >= D->size) {
+      return;
+   }
+
    long indice = (D->first + i) % D->cap;
    D->data[indice] = x;
 }
