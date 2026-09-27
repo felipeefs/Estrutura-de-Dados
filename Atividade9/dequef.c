@@ -255,7 +255,6 @@ void df_print(dequef* D) {
 
    else{
       printf("deque (%ld):", D->size);
-       D->first, D->cap, D->size); // Teste
 
       for(long i = 0; i< D->size; i++){
          long indice = (D->first + i) % D->cap;
