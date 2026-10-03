@@ -31,6 +31,17 @@ void insert_middle(no *tree, long x, long index){
     novo->right = NULL;
 }
 
+void insert_end(no *tree, long x, long index){
+    //Caso o valor seja maior que todos, ele é inserido no final
+    no *novo = malloc(sizeof(no));
+    novo->data = x;
+    novo->index = index;
+
+    tree->right = novo;
+    novo->right = NULL;
+    novo->left = NULL;
+}
+
 
 
 int main(){
@@ -51,7 +62,6 @@ int main(){
     tree->index = 0;
     tree->right = NULL; 
     tree->left = NULL;
-    long qtd_right = 1;
 
     for(int i= 1; i< n; i++){
         no *p = tree;
@@ -59,17 +69,21 @@ int main(){
         if(A[i] < p->data){
             //Se o item for menor que o primeiro da árvore ele vira a nova raiz
             tree = change_root(tree, A[i], i);
-            qtd_right = 1;
         }
 
         else{
-            //printf("%ld ", p->data); 
+            //printf("%ld ", p->data);
+            int booleano = 1;
             while(p->right != NULL){
                 if(A[i] > p->data && A[i] < p->right->data){
                     insert_middle(p, A[i], i);
+                    booleano = 0;
+                    break;
                 }
                 p = p->right;
-            }   
+            }
+            if(booleano)
+                insert_end(p, A[i], i);
             p = tree;
         }
 
