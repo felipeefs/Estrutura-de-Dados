@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "dequef.h"
 
 /**
@@ -21,7 +20,7 @@ dequef* df_alloc(long capacity, double factor) {
    if(D == NULL)
       return NULL;
 
-   D->first = 0;
+   D->first = 0; //Posição do primeiro elemento
    D->size = 0; //Quantidade de elementos na deque atual
    D->factor = factor; //Razão de dimensionamento
    D->mincap = capacity; // Capacidade inicial
@@ -78,7 +77,7 @@ int aumentar_array(dequef *D){
 }
 
 int diminuir_array(dequef *D){
-   //Redimensionamento para  **diminuir a lista
+   //Redimensionamento para diminuir a lista
    if(D->cap <= D->mincap)
       return 1;
    
@@ -109,7 +108,6 @@ int diminuir_array(dequef *D){
    return 1;
 }
 
-
 /**
    Add x to the end of D.
 
@@ -135,8 +133,6 @@ int df_push(dequef* D, float x) {
    return verdadeiro;
 
 }
-
-
 
 /**
    Remove a float from the end of D and return it.
@@ -165,9 +161,8 @@ float df_pop(dequef* D) {
    diminuir_array(D);
 
    return rem;
-   
+ 
 }
-
 
 /**
    Add x to the beginning of D.
@@ -224,8 +219,6 @@ float df_eject(dequef* D) {
    return rem;
 }
 
-
-
 /**
    Return D[i].
 
@@ -235,9 +228,15 @@ float df_get(dequef* D, long i) {
    if (D == NULL || i < 0 || i >= D->size) {
       return 0.0f;
    }
-   
+
    long indice = (D->first + i) % D->cap;
-   return D->data[indice];
+   float valor = D->data[indice];
+
+   // Evita que valores negativos pertos de zero
+   if (valor < 0.0f && valor > -0.05f)
+      valor = 0.0f;
+
+   return valor;
 }
 
 /**
@@ -260,20 +259,21 @@ void df_set(dequef* D, long i, float x) {
 **/
 void df_print(dequef* D) {
    if(df_size(D) == 0){
-      printf("deque (%ld):", df_size(D));
+      printf("deque (%ld): ", df_size(D));
    }
-
    else{
       printf("deque (%ld): ", D->size);
 
       for(long i = 0; i< D->size; i++){
          long indice = (D->first + i) % D->cap;
-         printf("%.1f ", D->data[indice]);
+         float valor = D->data[indice];
+
+         // Evita que valores negativos bem perto de zero"
+         if (valor < 0.0f && valor > -0.05f)
+            valor = 0.0f;
+
+         printf("%.1f ", valor);
       }
    }
    printf("\n");
-
-   
-   
-   
 }
