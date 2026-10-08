@@ -45,9 +45,18 @@ no *insert(char *w, long f, no *tree){
     return tree;
 }
 
-void search(char *w){
-    
-
+int search_inOrder(char *w, no *tree){
+    no *p = tree;
+    if(p != NULL){
+        if(strcmp(p->word, w) == 0){
+            printf("%s %ld\n", p->word, p->freq);
+            return 1;
+        }
+        search_inOrder(w, p->left);
+        search_inOrder(w, p->right);
+    }
+    // printf("%s not found.\n", w);
+    // return 0;
 }
 
 
@@ -67,8 +76,12 @@ int main(){
         }
         else if(strcmp(comando, "SEARCH") == 0){
             char *w = malloc(1000 * sizeof(char));
-            scanf("%999s %ld", w);
-        }
+            scanf("%999s", w);
+            if(!search_inOrder(w, tree)){
+                printf("%s not found.\n", w);
+            }
+
+        }   
 
     }
 
