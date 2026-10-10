@@ -17,6 +17,7 @@ no *insert(char *w, long f, no *tree){
         novo->word = w;
         novo->left = NULL;
         novo->right = NULL;
+        return novo;
     }
 
     int c = strcmp(w, tree->word);
