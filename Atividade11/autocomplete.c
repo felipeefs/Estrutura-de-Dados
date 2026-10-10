@@ -11,37 +11,22 @@ typedef struct no{
 }no;
 
 no *insert(char *w, long f, no *tree){
-    no *novo = malloc(sizeof(no));
-    novo->freq = f;
-    novo->word = w;
-    novo->left = NULL;
-    novo->right = NULL;
-
-    no *u = tree; //Variável para avançar a árvore no loop
-    no *p = NULL;
-    while(u != NULL){
-        p = u;
-        if(novo->word == p->word){
-            long freq = novo->freq;    
-            p->freq = freq;
-            goto fim;
-        }
-        else if(novo->freq < u->freq)
-            u = u->left;
-        else 
-            u = u->right;
+    if(tree == NULL){
+        no *novo = malloc(sizeof(no));
+        novo->freq = f;
+        novo->word = w;
+        novo->left = NULL;
+        novo->right = NULL;
     }
 
-    if(p == NULL){
-        //Se o p é nulo significa que vamos adicionar o primeiro item na árvore
-        tree = novo; 
-    }
-    else if(novo->freq < p->freq)
-        p->left = novo;
+    int c = strcmp(w, tree->word);
+    if(c == 0) //Mesma palavra
+        tree->freq = f;
+    else if(c < 0)
+        tree->left = insert(w, f, tree->left);
     else 
-        p->right = novo;
-
-    fim:
+        tree->right = insert(w, f, tree->right);
+    
     return tree;
 }
 
