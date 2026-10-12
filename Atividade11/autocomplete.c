@@ -249,7 +249,20 @@ void delete(no* pai, no* p, no** tree){
 
 
 void print_lexicografico(no *tree){
-    
+   if(tree != NULL){
+        print_lexicografico(tree->left);
+        printf("%s ", tree->word);
+        print_lexicografico(tree->right);
+   }
+}
+
+void liberar_arvore(no *tree){
+    if(tree!=NULL){
+        liberar_arvore(tree->left);
+        liberar_arvore(tree->right);
+        free(tree->word);
+        free(tree);
+    }
 
 }
 
@@ -287,16 +300,23 @@ int main(){
             merge_sort(words, freqs, 0, i - 1);
             if(i>0){
                 for(long j= 0; j<k && j<i;j++){
-                    printf("(%s,%ld)\n", words[j], freqs[j]);
+                    printf("(%s,%ld) ", words[j], freqs[j]);
                 }
+                printf("\n");
             }
             else
-                printf("nothing for %s\n", x);
+                printf("nothing for %s.\n", x);
             free(x);
             free(words);
             free(freqs);
         }
         else if(strcmp(comando, "PRINT") == 0){
+            if(tree == NULL)
+                printf("the dictionary is empty.\n");
+            else{
+                print_lexicografico(tree);
+                printf("\n");
+            }
 
         }
         else if(strcmp(comando, "DELETE") == 0){
@@ -311,5 +331,6 @@ int main(){
         }
 
     }
+    liberar_arvore(tree);
     return 0;
 }
