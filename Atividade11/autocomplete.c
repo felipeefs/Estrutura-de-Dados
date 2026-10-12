@@ -173,6 +173,15 @@ int search_Todelete(char *w, no** p, no** pai){
         return 0;
 }
 
+void achar_predecessor(no **p_p, no **pai_p){
+    *pai_p = *p_p; 
+    *p_p = (*p_p) ->left;
+    while((*p_p)->right != NULL){
+        *pai_p = *p_p; 
+        *p_p = (*p_p) ->right;
+    }
+}
+
 void delete(no* pai, no* p, no** tree){
     //Apaga o nó em 4 diferentes casos
 
@@ -213,11 +222,29 @@ void delete(no* pai, no* p, no** tree){
         free(p);
     }
 
-    else{ //o pai tem ambos os nós
+    else{ //o pai tem ambos os nós (ACHANDO O PRECESSOR - MAIOR VALOR QUE É MENOR QUE O QUE VAMOS APAGAR)
+        no *p_p = p; //p_p é o nó prodecessor e pai_p é o pai do prodecessor
+        no *pai_p = NULL;
+        achar_predecessor(&p_p, &pai_p);
 
+        //Tira o prodecessor da posição antiga
+        if(pai_p != p){
+            pai_p->right = p_p->left;
+            p_p->left = p->left;
+        }
+        p_p->right = p->right;
 
-    } 
+        //coloca o prodecessor no luga de p
+        if(p == *tree)
+            *tree = p_p;
+        else if(pai->left == p)
+            pai->left = p_p;
+        else 
+            pai->right = p_p;
         
+        free(p->word);
+        free(p);   
+    }
 }
 
 
@@ -281,7 +308,6 @@ int main(){
             free(w);
             if(p!=NULL)
                 delete(pai, p, &tree);
-
         }
 
     }
