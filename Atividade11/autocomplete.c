@@ -153,12 +153,24 @@ int auto_complete(no*tree, char *x, char*** words,long **freqs, long *i, long n)
     return 1;
 }
 
+int delete(no* tree, char *w){
+
+
+
+}
+
+
+void print_lexicografico(no *tree){
+    
+
+}
+
 
 int main(){
     char comando[20];
     no *tree = NULL;
 
-    while(scanf(" %19s", comando) != EOF){
+    while(scanf("%19s", comando) != EOF){
         if(strcmp(comando, "EXIT") == 0)
             break;
 
@@ -195,7 +207,9 @@ int main(){
             free(x);
             free(words);
             free(freqs);
-            
+        }
+        else if(strcmp(comando, "PRINT")){
+
         }
     }
     return 0;
