@@ -42,14 +42,14 @@ int search_inOrder(char *w, no *tree){
             printf("%s %ld\n", p->word, p->freq);
             return 1;
         }
-        if(search_inOrder(w, p->left))
-            return 1;
-        if(search_inOrder(w, p->right))
-            return 1;
+        if(strcmp(p->word, w) > 0)
+            return search_inOrder(w, p->left);
+        else
+            return search_inOrder(w, p->right);
     }
-
-    // printf("%s not found.\n", w);
-    return 0;
+    else    
+        return 0;
+        
 }
 
 void ordenar_vetores(char **words, long *freqs, long l, long m, long k){
@@ -153,10 +153,71 @@ int auto_complete(no*tree, char *x, char*** words,long **freqs, long *i, long n)
     return 1;
 }
 
-int delete(no* tree, char *w){
+int search_Todelete(char *w, no** p, no** pai){
+    //Faz a busca do nó que queremos apagar, guardando o seu pai, que será util quando for fazer a função delete()
+    if(*p != NULL){
+        if(strcmp((*p)->word, w) == 0){         
+            return 1;
+        }
+        *pai = *p;
+        if(strcmp((*p)->word, w) > 0){
+            *p = (*p)->left;
+            return search_Todelete(w, p, pai);
+        }
+        else{
+            *p = (*p)->right;
+            return search_Todelete(w, p, pai);
+        }   
+    }
+    else    
+        return 0;
+}
+
+void delete(no* pai, no* p, no** tree){
+    //Apaga o nó em 4 diferentes casos
+
+    if(p->left == NULL && p->right == NULL){ //nó sem filhos
+        if(p == *tree)
+            *tree = NULL;
+        else if(pai->left == p)
+            pai->left = NULL;
+        else
+            pai->right = NULL;        
+        free(p->word);
+        free(p);
+    }
+
+    else if(p->left != NULL && p->right == NULL){ //nó só com filho do esquerda
+        if(p == *tree)
+            *tree = p->left;
+        else if(pai->left == p){
+            pai->left = p->left;
+        }
+        else{
+            pai->right = p->left;
+        }
+        free(p->word);
+        free(p);
+    }
+
+    else if(p->right != NULL && p->left == NULL){ //nó só com filho da direita
+        if(p == *tree)
+            *tree = p->right;
+        else if(pai->left == p){
+            pai->left = p->right;
+        }
+        else{
+            pai->right = p->right;
+        }
+        free(p->word);
+        free(p);
+    }
+
+    else{ //o pai tem ambos os nós
 
 
-
+    } 
+        
 }
 
 
@@ -208,9 +269,21 @@ int main(){
             free(words);
             free(freqs);
         }
-        else if(strcmp(comando, "PRINT")){
+        else if(strcmp(comando, "PRINT") == 0){
 
         }
+        else if(strcmp(comando, "DELETE") == 0){
+            char *w = malloc(1000 * sizeof(char));
+            scanf("%999s", w);
+            no *pai = NULL;
+            no *p = tree;
+            search_Todelete(w, &p, &pai);
+            free(w);
+            if(p!=NULL)
+                delete(pai, p, &tree);
+
+        }
+
     }
     return 0;
 }
