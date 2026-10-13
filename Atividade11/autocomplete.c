@@ -133,7 +133,7 @@ int auto_complete(no*tree, char *x, char*** words,long **freqs, long *i, long n)
         return 0;
 
 
-    if(c==0){
+    if(c==0){ //Achou uma palavra, coloca ela na lista
         (*words)[*i] = tree->word;
         (*freqs)[*i] = tree->freq;
         (*i)++;
@@ -174,6 +174,7 @@ int search_Todelete(char *w, no** p, no** pai){
 }
 
 void achar_predecessor(no **p_p, no **pai_p){
+    //Acha o predecessor do ramo escolhido
     *pai_p = *p_p; 
     *p_p = (*p_p) ->left;
     while((*p_p)->right != NULL){
@@ -184,7 +185,6 @@ void achar_predecessor(no **p_p, no **pai_p){
 
 void delete(no* pai, no* p, no** tree){
     //Apaga o nó em 4 diferentes casos
-
     if(p->left == NULL && p->right == NULL){ //nó sem filhos
         if(p == *tree)
             *tree = NULL;
@@ -247,8 +247,8 @@ void delete(no* pai, no* p, no** tree){
     }
 }
 
-
 void print_lexicografico(no *tree){
+    //A partir de um percorrimento em-ordem, printa toda a árvore em ordem lexografica
    if(tree != NULL){
         print_lexicografico(tree->left);
         printf("%s ", tree->word);
@@ -257,15 +257,14 @@ void print_lexicografico(no *tree){
 }
 
 void liberar_arvore(no *tree){
+    //Ao finalizar o programa libera toda a memória alocada para a árvore
     if(tree!=NULL){
         liberar_arvore(tree->left);
         liberar_arvore(tree->right);
         free(tree->word);
         free(tree);
     }
-
 }
-
 
 int main(){
     char comando[20];
