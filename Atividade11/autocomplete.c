@@ -160,6 +160,7 @@ int search_Todelete(char *w, no** p, no** pai){
             return 1;
         }
         *pai = *p;
+        
         if(strcmp((*p)->word, w) > 0){
             *p = (*p)->left;
             return search_Todelete(w, p, pai);
