@@ -54,9 +54,32 @@ void rotacao_esquerda(no *x){
 }
 
 
-void balancear_AVL(){
+void balancear_AVL(no *x, long fb){
+    if(fb == 2){
+        no *filho = x->left;
+        if(filho->fb >= 0){
+            //Caso LL
+            rotacao_direita(x);
+        }
+        else{
+            //Caso LR
+            rotacao_esquerda(x->left);
+            rotacao_direita(x);
+        }
+    }
 
-
+    else if(fb == -2){
+        no *filho = x->right;
+        if(filho->right <= 0){
+            //Faz rotação RR
+            rotacao_esquerda(x);
+        }
+        else{
+            //Caso RL
+            rotacao_direita(x->right);
+            rotacao_esquerda(x);
+        }
+    }
 
 }
 
@@ -69,13 +92,13 @@ void atualizar_fb(no *novo){
     while(p != NULL || p->fb != 0){
         if(filho == p->left){ //Se foi inserido na esquerda soma
             p->fb ++;
-        //     if(p->fb == 2 || p->fb == -2)
-        //         balancear_AVL()
+            if(p->fb == 2 || p->fb == -2)
+                balancear_AVL(p, p->fb);
         }
         else{ //Se foi inserido na direita subtrai
             p->fb --;
-        //     if(p->fb == 2 || p->fb == -2)
-        //         balancear_AVL()
+            if(p->fb == 2 || p->fb == -2)
+                balancear_AVL(p, p->fb);
         }
 
         filho = p;
@@ -116,7 +139,7 @@ int main(){
     //Criação da árvore
     no *tree = NULL;
 
-    while (scanf(" %c", &operador) != EOF)
+    while (scanf("%c", &operador) != EOF)
     {
         switch (operador){
         case 'i':
@@ -134,6 +157,4 @@ int main(){
         
     }
     
-
-
 }
