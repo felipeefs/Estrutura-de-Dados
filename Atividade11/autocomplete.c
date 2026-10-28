@@ -25,7 +25,7 @@ no *insert(char *w, long f, no *tree){
     if(c == 0){ //Mesma palavra
         tree->freq = f;
         free(w);
-    }
+    } 
     else if(c < 0) //Palavra w menor, então percorre a esquerda
         tree->left = insert(w, f, tree->left);
     else  //Palavra w maior, então percorre a direita
@@ -269,7 +269,7 @@ void liberar_arvore(no *tree){
 
 int main(){
     char comando[20];
-    no *tree = NULL;
+    no *tree = NULL; 
 
     while(scanf("%19s", comando) != EOF){
         if(strcmp(comando, "EXIT") == 0)
