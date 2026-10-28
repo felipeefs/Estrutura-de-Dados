@@ -33,7 +33,7 @@ void rotacao_direita(no *x){
 }
 
 void rotacao_esquerda(no *x){
-    //Faz uma rotação a direita da sub-árvore
+    //Faz uma rotação a esquerda da sub-árvore
     no *y = x->right;
     x->right = y->left;
 
@@ -49,12 +49,13 @@ void rotacao_esquerda(no *x){
             x->parent->right = y;
     }
 
-    y->left;
+    y->left = x;
     x->parent = y;
 }
 
 
 void balancear_AVL(no *x, long fb){
+    //Analise se precisa de balanceamento na direita ou esquerda, e seu devido caso, e balanceia a árvore
     if(fb == 2){
         no *filho = x->left;
         if(filho->fb >= 0){
@@ -70,7 +71,7 @@ void balancear_AVL(no *x, long fb){
 
     else if(fb == -2){
         no *filho = x->right;
-        if(filho->right <= 0){
+        if(filho->fb <= 0){
             //Faz rotação RR
             rotacao_esquerda(x);
         }
@@ -89,17 +90,25 @@ void atualizar_fb(no *novo){
     no *filho = novo;
     no *p = novo->parent;
 
-    while(p != NULL || p->fb != 0){
+    while(p != NULL){
         if(filho == p->left){ //Se foi inserido na esquerda soma
             p->fb ++;
-            if(p->fb == 2 || p->fb == -2)
+            if(p->fb == 0)
+                break;
+            else if(p->fb == 2 || p->fb == -2){
                 balancear_AVL(p, p->fb);
+                break;
+            }
         }
         else{ //Se foi inserido na direita subtrai
             p->fb --;
-            if(p->fb == 2 || p->fb == -2)
+            if(p->fb == 0)
+                break;
+            else if(p->fb == 2 || p->fb == -2){
                 balancear_AVL(p, p->fb);
+                break;
         }
+    }
 
         filho = p;
         p = p->parent;
@@ -109,6 +118,10 @@ void atualizar_fb(no *novo){
 no *inserir(no *tree, long x ,char *vis, char *est){
     if(tree == NULL){ //Se é igual a NULL se torna a raiz
         no *novo = malloc(sizeof(no));
+
+        if(novo == NULL)
+            return NULL;
+
         novo->fb = 0;
         novo->id = x;
         novo->vis = vis;
@@ -122,11 +135,15 @@ no *inserir(no *tree, long x ,char *vis, char *est){
 
     if(x < tree->id){
         tree->left = inserir(tree->left, x, vis, est);
-        atualizar_fb(tree->left);
+
+        if(tree->left != NULL)
+            tree->left->parent = tree; //Faz a conexão do novo nó com um pai
     }
     else if(x > tree->id){
         tree->right = inserir(tree->right, x, vis, est);
-        atualizar_fb(tree->right);
+
+        if(tree->right != NULL)
+            tree->right->parent = tree;
     }
     
     return tree;
