@@ -246,6 +246,24 @@ void printar_crescente(no *tree){
     printar_crescente(tree->right);
 }
 
+void ocorrencia_doEstado(no *tree, long *obs, long *des, long *atu){
+    //Algoritmo de busca pré ordem para achar a ocorrência de três diferentes estados (obsoleto, desatualizado e atualizado)
+    if(tree == NULL){
+        return;
+    }
+    
+    if(tree->est == "obsoleto")
+        obs++;
+    else if(tree->est == "desatualizado")
+        des ++;
+    else if(tree->est == "atualizado")
+        atu++;
+
+    ocorrencia_doEstado(tree->left, obs, des, atu);
+    ocorrencia_doEstado(tree->right, obs, des, atu);
+    
+}
+
 int main(){
     char operador;
 
@@ -281,7 +299,6 @@ int main(){
             
             atualizar(tree, x, vis, est);
         }
-
             break;
 
         case 'b':{
@@ -302,27 +319,33 @@ int main(){
             printar_crescente(tree);
             printf("\n");
         }
-        break;
-        
-        case 't':
-            if(tree == NULL){
-                printf("Arvore vazia\n");
-                break;
-            }
-
-            printf("%ld (raiz) - fb: %ld. visibilidade: %s. estado:%s\n", tree->id, tree->fb, tree->vis, tree->est);
-
-            if(tree->right != NULL)
-                printf("%ld (filho dir) - fb: %ld. visibilidade:%s. estado:%s\n", tree->right->id, tree->right->fb, tree->right->vis, tree->right->est);
-            else
-                printf("Filho dir: NULL\n");
-
-            if(tree->left != NULL)
-                printf("%ld (filho esq) - fb: %ld. visibilidade:%s. estado:%s\n", tree->left->id, tree->left->fb, tree->left->vis, tree->left->est);
-            else
-                printf("Filho esq: NULL\n");
-
             break;
+
+        case 't':{
+            long obs = 0, des = 0, atu = 0;
+            ocorrencia_doEstado(tree, &obs, &des, &atu);
+            printf("atualizado: %ld, desatualizado: %ld, obsoleto: %ld\n", atu, des, obs);
+        }
+        
+        // case 'k':
+        //     if(tree == NULL){
+        //         printf("Arvore vazia\n");
+        //         break;
+        //     }
+
+        //     printf("%ld (raiz) - fb: %ld. visibilidade: %s. estado:%s\n", tree->id, tree->fb, tree->vis, tree->est);
+
+        //     if(tree->right != NULL)
+        //         printf("%ld (filho dir) - fb: %ld. visibilidade:%s. estado:%s\n", tree->right->id, tree->right->fb, tree->right->vis, tree->right->est);
+        //     else
+        //         printf("Filho dir: NULL\n");
+
+        //     if(tree->left != NULL)
+        //         printf("%ld (filho esq) - fb: %ld. visibilidade:%s. estado:%s\n", tree->left->id, tree->left->fb, tree->left->vis, tree->left->est);
+        //     else
+        //         printf("Filho esq: NULL\n");
+
+        //     break;
         
         
         default:
