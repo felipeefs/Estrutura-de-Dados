@@ -5,8 +5,8 @@
 typedef struct no{
     long fb;
     long id;
-    char *vis;
-    char *est;
+    char vis[21];
+    char est[21];
     struct no *left;
     struct no *right;
     struct no *parent;
@@ -83,8 +83,8 @@ no *balancear_AVL(no *x, long fb){
             }
             else if(fb_z == 1){
                 x->fb = 0;
-                x->right->fb = 0;
-                x->left->fb = -1;
+                x->right->fb = -1;
+                x->left->fb = 0;
             }
             else if(fb_z == -1){
                 x->fb = 0;
@@ -177,8 +177,8 @@ no *inserir(no *tree, long x ,char *vis, char *est, no **inserido){
 
         novo->fb = 0;
         novo->id = x;
-        novo->vis = vis;
-        novo->est = est;
+        strcpy(novo->vis,vis);
+        strcpy(novo->est,est);
         novo->parent = NULL;
         novo->left = NULL;
         novo->right = NULL;
@@ -272,11 +272,14 @@ int main(){
 
     while (scanf(" %c", &operador) != EOF)
     {
+        if(operador == 'f')
+            break;
+            
         switch (operador){
         case 'i':{
             long x;
-            char *vis = malloc(100 * sizeof(char));
-            char *est = malloc(100 * sizeof(char));
+            char vis[21];
+            char est[21];
             scanf("%ld %20s %20s",&x, vis, est);
             
             no* novo = NULL;
@@ -284,10 +287,6 @@ int main(){
 
             if(novo!= NULL)
                 atualizar_fb(novo, &tree);
-            else{
-                free(vis);
-                free(est);
-            }
         }
         break;
 
