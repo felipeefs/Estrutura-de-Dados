@@ -3,10 +3,10 @@
 #include <string.h>
 
 typedef struct no{
-    long fb;
-    long id;
-    char vis[21];
-    char est[21];
+    signed char fb;
+    long long id;
+    char vis[12];
+    char est[16];
     struct no *left;
     struct no *right;
     struct no *parent;
@@ -58,7 +58,7 @@ no *rotacao_esquerda(no *x){
     return y; //Retorna a nova raiz
 }
 
-no *balancear_AVL(no *x, long fb){
+no *balancear_AVL(no *x, long long fb){
     //Analise se precisa de balanceamento na direita ou esquerda, e seu devido caso, e balanceia a árvore
     if(fb == 2){
         no *filho = x->left;
@@ -71,7 +71,7 @@ no *balancear_AVL(no *x, long fb){
         }
         else{
             //Caso LR
-            long fb_z = x->left->right->fb; //Guaurda o fb da futura nova raiz
+            long long fb_z = x->left->right->fb; //Guaurda o fb da futura nova raiz
             x->left = rotacao_esquerda(x->left);
             x = rotacao_direita(x);
 
@@ -105,7 +105,7 @@ no *balancear_AVL(no *x, long fb){
         }
         else{
             //Caso RL
-            long fb_z = x->right->left->fb; //Guaurda o fb da futura nova raiz
+            long long fb_z = x->right->left->fb; //Guaurda o fb da futura nova raiz
             x->right = rotacao_direita(x->right);
             x = rotacao_esquerda(x);
 
@@ -165,7 +165,7 @@ void atualizar_fb(no *novo, no **tree){
     }
 }
 
-no *inserir(no *tree, long x ,char *vis, char *est, no **inserido){
+no *inserir(no *tree, long long x ,char *vis, char *est, no **inserido){
     //A partir de uma recursão, percorre toda a árvore de busca, indo para a direita quando o valor x for maior, e para a esquerda quando x for menor; para inseri-lo no final de uma sub-árvore
     if(tree == NULL){ //Se é igual a NULL se torna a raiz
         no *novo = malloc(sizeof(no));
@@ -202,7 +202,7 @@ no *inserir(no *tree, long x ,char *vis, char *est, no **inserido){
 
 }
 
-void atualizar(no *tree, long x ,char *vis, char *est, long *obs, long *atu, long *des){
+void atualizar(no *tree, long long x ,char *vis, char *est, long long *obs, long long *atu, long long *des){
     //Procura, a partir de uma pesquisa em árvore de buscas, um nó com id == x para atualizar a visibilidade e o estado
     if(tree == NULL)
         return;
@@ -232,7 +232,7 @@ void atualizar(no *tree, long x ,char *vis, char *est, long *obs, long *atu, lon
         atualizar(tree->left, x, vis, est, obs, atu, des);
 }
 
-no *buscar(no *tree, long x){
+no *buscar(no *tree, long long x){
     //Busca um nó x especifico
     if(tree == NULL){
         return NULL;
@@ -255,13 +255,13 @@ void printar_crescente(no *tree){
         return;
 
     printar_crescente(tree->left);
-    printf("%ld ", tree->id);
+    printf("%lld ", tree->id);
     printar_crescente(tree->right);
 }
 
 int main(){
     char operador;
-    long obs = 0, des = 0, atu = 0;
+    long long obs = 0, des = 0, atu = 0;
 
     //Criação da árvore
     no *tree = NULL;
@@ -273,10 +273,10 @@ int main(){
 
         switch (operador){
         case 'i':{
-            long x;
-            char vis[21];
-            char est[21];
-            scanf("%ld %20s %20s",&x, vis, est);
+            long long x;
+            char vis[12];
+            char est[16];
+            scanf("%lld %13s %17s",&x, vis, est);
             
             no* novo = NULL;
             tree = inserir(tree, x, vis, est, &novo);
@@ -295,25 +295,25 @@ int main(){
         break;
 
         case 'a':{
-            long x;
-            char vis[21];
-            char est[21];
-            scanf("%ld %20s %20s",&x, vis, est);
+            long long x;
+            char vis[12];
+            char est[16];
+            scanf("%lld %13s %17s",&x, vis, est);
             
             atualizar(tree, x, vis, est, &obs, &atu, &des);
         }
             break;
 
         case 'b':{
-            long x;
-            scanf("%ld", &x);
+            long long x;
+            scanf("%lld", &x);
 
             no *buscado = buscar(tree, x);
             if(buscado == NULL){
-                printf("%ld nao existe\n", x);
+                printf("%lld nao existe\n", x);
             }
             else
-                printf("%ld, %s, %s\n", x, buscado->vis, buscado->est);
+                printf("%lld, %s, %s\n", x, buscado->vis, buscado->est);
         }
             break;
 
@@ -331,7 +331,7 @@ int main(){
             break;
 
         case 't':{
-            printf("atualizado: %ld, desatualizado: %ld, obsoleto: %ld\n", atu, des, obs);
+            printf("atualizado: %lld, desatualizado: %lld, obsoleto: %lld\n", atu, des, obs);
         }
             break;
                 
