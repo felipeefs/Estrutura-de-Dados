@@ -4,13 +4,57 @@
 
 typedef struct no{
     signed char fb;
+    unsigned char vis; //codigo da visibilidade (ver codigo_vis)
+    unsigned char est; //codigo do estado (ver codigo_est)
     long long id;
-    char vis[12];
-    char est[16];
     struct no *left;
     struct no *right;
     struct no *parent;
 }no;
+
+int codigo_vis(char *s){
+    //Converte a visibilidade em um codigo de 1 byte, para o no ocupar menos memoria
+    if(strcmp(s,"restrito") == 0)
+        return 0;
+    else if(strcmp(s,"interno") == 0)
+        return 1;
+    else if(strcmp(s,"publico") == 0)
+        return 2;
+    else
+        return 3; //bloqueado
+}
+
+int codigo_est(char *s){
+    //Converte o estado em um codigo de 1 byte, para o no ocupar menos memoria
+    if(strcmp(s,"atualizado") == 0)
+        return 0;
+    else if(strcmp(s,"desatualizado") == 0)
+        return 1;
+    else
+        return 2; //obsoleto
+}
+
+const char *nome_vis(int c){
+    //Faz o caminho inverso: do codigo de volta para a palavra
+    if(c == 0)
+        return "restrito";
+    else if(c == 1)
+        return "interno";
+    else if(c == 2)
+        return "publico";
+    else
+        return "bloqueado";
+}
+
+const char *nome_est(int c){
+    //Faz o caminho inverso: do codigo de volta para a palavra
+    if(c == 0)
+        return "atualizado";
+    else if(c == 1)
+        return "desatualizado";
+    else
+        return "obsoleto";
+}
 
 no *rotacao_direita(no *x){
     //Faz uma rotação para a direita da sub-árvore
@@ -175,8 +219,8 @@ no *inserir(no *tree, long long x ,char *vis, char *est, no **inserido){
 
         novo->fb = 0;
         novo->id = x;
-        strcpy(novo->vis,vis);
-        strcpy(novo->est,est);
+        novo->vis = codigo_vis(vis);
+        novo->est = codigo_est(est);
         novo->parent = NULL;
         novo->left = NULL;
         novo->right = NULL;
@@ -208,15 +252,15 @@ void atualizar(no *tree, long long x ,char *vis, char *est, long long *obs, long
         return;
 
     if(tree->id == x){
-        if(strcmp(tree->est,"obsoleto") == 0)
+        if(strcmp(nome_est(tree->est),"obsoleto") == 0)
             (*obs)--;
-        else if(strcmp(tree->est,"atualizado") == 0)
+        else if(strcmp(nome_est(tree->est),"atualizado") == 0)
             (*atu)--;
-        else if(strcmp(tree->est,"desatualizado") == 0)
+        else if(strcmp(nome_est(tree->est),"desatualizado") == 0)
             (*des)--;
 
-        strcpy(tree->vis, vis);
-        strcpy(tree->est, est);
+        tree->vis = codigo_vis(vis);
+        tree->est = codigo_est(est);
 
         if(strcmp(est,"obsoleto") == 0)
             (*obs)++;
@@ -274,9 +318,9 @@ int main(){
         switch (operador){
         case 'i':{
             long long x;
-            char vis[12];
-            char est[16];
-            scanf("%lld %13s %17s",&x, vis, est);
+            char vis[21];
+            char est[21];
+            scanf("%lld %20s %20s",&x, vis, est);
             
             no* novo = NULL;
             tree = inserir(tree, x, vis, est, &novo);
@@ -284,11 +328,11 @@ int main(){
             if(novo!= NULL){
                 atualizar_fb(novo, &tree);
                 //Atualizar ocorrência
-                if(strcmp(novo->est,"obsoleto") == 0)
+                if(strcmp(est,"obsoleto") == 0)
                     obs++;
-                else if(strcmp(novo->est,"atualizado") == 0)
+                else if(strcmp(est,"atualizado") == 0)
                     atu++;
-                else if(strcmp(novo->est,"desatualizado") == 0)
+                else if(strcmp(est,"desatualizado") == 0)
                     des++;
             }
         }
@@ -296,9 +340,9 @@ int main(){
 
         case 'a':{
             long long x;
-            char vis[12];
-            char est[16];
-            scanf("%lld %13s %17s",&x, vis, est);
+            char vis[21];
+            char est[21];
+            scanf("%lld %20s %20s",&x, vis, est);
             
             atualizar(tree, x, vis, est, &obs, &atu, &des);
         }
@@ -313,7 +357,7 @@ int main(){
                 printf("%lld nao existe\n", x);
             }
             else
-                printf("%lld, %s, %s\n", x, buscado->vis, buscado->est);
+                printf("%lld, %s, %s\n", x, nome_vis(buscado->vis), nome_est(buscado->est));
         }
             break;
 
