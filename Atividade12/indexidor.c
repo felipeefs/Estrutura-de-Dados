@@ -58,7 +58,6 @@ no *rotacao_esquerda(no *x){
     return y; //Retorna a nova raiz
 }
 
-
 no *balancear_AVL(no *x, long fb){
     //Analise se precisa de balanceamento na direita ou esquerda, e seu devido caso, e balanceia a árvore
     if(fb == 2){
@@ -125,7 +124,6 @@ no *balancear_AVL(no *x, long fb){
                 x->right->fb = 0;
                 x->left->fb = 1;
             }
-            
         }
     }
 
@@ -204,20 +202,34 @@ no *inserir(no *tree, long x ,char *vis, char *est, no **inserido){
 
 }
 
-void atualizar(no *tree, long x ,char *vis, char *est){
+void atualizar(no *tree, long x ,char *vis, char *est, long *obs, long *atu, long *des){
     //Procura, a partir de uma pesquisa em árvore de buscas, um nó com id == x para atualizar a visibilidade e o estado
     if(tree == NULL)
         return;
 
     if(tree->id == x){
+        if(strcmp(tree->est,"obsoleto") == 0)
+            (*obs)--;
+        else if(strcmp(tree->est,"atualizado") == 0)
+            (*atu)--;
+        else if(strcmp(tree->est,"desatualizado") == 0)
+            (*des)--;
+
         strcpy(tree->vis, vis);
         strcpy(tree->est, est);
+
+        if(strcmp(est,"obsoleto") == 0)
+            (*obs)++;
+        else if(strcmp(est,"atualizado") == 0)
+            (*atu)++;
+        else if(strcmp(est,"desatualizado") == 0)
+            (*des)++;
         return;
     }
     else if(x > tree->id)
-        atualizar(tree->right, x, vis, est);
+        atualizar(tree->right, x, vis, est, obs, atu, des);
     else    
-        atualizar(tree->left, x, vis, est);
+        atualizar(tree->left, x, vis, est, obs, atu, des);
 }
 
 no *buscar(no *tree, long x){
@@ -243,38 +255,22 @@ void printar_crescente(no *tree){
         return;
 
     printar_crescente(tree->left);
-    printf(" %ld", tree->id);
+    printf("%ld ", tree->id);
     printar_crescente(tree->right);
-}
-
-void ocorrencia_doEstado(no *tree, long *obs, long *des, long *atu){
-    //Algoritmo de busca pré ordem para achar a ocorrência de três diferentes estados (obsoleto, desatualizado e atualizado)
-    if(tree == NULL){
-        return;
-    }
-    
-    if(strcmp(tree->est,"obsoleto") == 0)
-        (*obs)++;
-    else if(strcmp(tree->est,"desatualizado") == 0)
-        (*des)++;
-    else if(strcmp(tree->est,"atualizado") == 0)
-        (*atu)++;
-
-    ocorrencia_doEstado(tree->left, obs, des, atu);
-    ocorrencia_doEstado(tree->right, obs, des, atu);
 }
 
 int main(){
     char operador;
+    long obs = 0, des = 0, atu = 0;
 
     //Criação da árvore
     no *tree = NULL;
 
-    while (scanf(" %c", &operador) != EOF)
+    while (scanf(" %c", &operador) == 1)
     {
         if(operador == 'f')
             break;
-            
+
         switch (operador){
         case 'i':{
             long x;
@@ -285,20 +281,26 @@ int main(){
             no* novo = NULL;
             tree = inserir(tree, x, vis, est, &novo);
 
-            if(novo!= NULL)
+            if(novo!= NULL){
                 atualizar_fb(novo, &tree);
+                //Atualizar ocorrência
+                if(strcmp(novo->est,"obsoleto") == 0)
+                    obs++;
+                else if(strcmp(novo->est,"atualizado") == 0)
+                    atu++;
+                else if(strcmp(novo->est,"desatualizado") == 0)
+                    des++;
+            }
         }
         break;
 
         case 'a':{
             long x;
-            char *vis = malloc(100 * sizeof(char));
-            char *est = malloc(100 * sizeof(char));
+            char vis[21];
+            char est[21];
             scanf("%ld %20s %20s",&x, vis, est);
             
-            atualizar(tree, x, vis, est);
-            free(vis);
-            free(est);
+            atualizar(tree, x, vis, est, &obs, &atu, &des);
         }
             break;
 
@@ -321,7 +323,7 @@ int main(){
                 break;
             }
             else{
-                printf("documentos:");
+                printf("documentos: ");
                 printar_crescente(tree);
                 printf("\n");
             }
@@ -329,33 +331,10 @@ int main(){
             break;
 
         case 't':{
-            long obs = 0, des = 0, atu = 0;
-            ocorrencia_doEstado(tree, &obs, &des, &atu);
             printf("atualizado: %ld, desatualizado: %ld, obsoleto: %ld\n", atu, des, obs);
         }
             break;
-        
-        // case 'k':
-        //     if(tree == NULL){
-        //         printf("Arvore vazia\n");
-        //         break;
-        //     }
-
-        //     printf("%ld (raiz) - fb: %ld. visibilidade: %s. estado:%s\n", tree->id, tree->fb, tree->vis, tree->est);
-
-        //     if(tree->right != NULL)
-        //         printf("%ld (filho dir) - fb: %ld. visibilidade:%s. estado:%s\n", tree->right->id, tree->right->fb, tree->right->vis, tree->right->est);
-        //     else
-        //         printf("Filho dir: NULL\n");
-
-        //     if(tree->left != NULL)
-        //         printf("%ld (filho esq) - fb: %ld. visibilidade:%s. estado:%s\n", tree->left->id, tree->left->fb, tree->left->vis, tree->left->est);
-        //     else
-        //         printf("Filho esq: NULL\n");
-
-        //     break;
-        
-        
+                
         default:
             break;
         }
