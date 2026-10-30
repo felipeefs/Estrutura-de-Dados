@@ -219,6 +219,24 @@ void atualizar(no *tree, long x ,char *vis, char *est){
         atualizar(tree->left, x, vis, est);
 }
 
+no *buscar(no *tree, long x){
+    
+    if(tree == NULL){
+        return NULL;
+    }
+
+    if(x == tree->id)
+        return tree;
+        
+    else if(x > tree->id){
+        return buscar(tree->right, x);
+    }
+    else if(x < tree->id){
+        return buscar(tree->left, x);
+    }
+    //Retorna o nó encontrado
+}
+
 int main(){
     char operador;
 
@@ -246,18 +264,31 @@ int main(){
         }
         break;
 
-        case 'a':
+        case 'a':{
             long x;
             char *vis = malloc(100 * sizeof(char));
             char *est = malloc(100 * sizeof(char));
             scanf("%ld %20s %20s",&x, vis, est);
 
             atualizar(tree, x, vis, est);
+        }
 
             break;
 
-            
+        case 'b':{
+            long x;
+            scanf("%ld", &x);
 
+            no *buscado = buscar(tree, x);
+            if(buscado == NULL){
+                printf("%ld nao existe\n", x);
+            }
+            else
+                printf("%ld, %s, %s", x, buscado->vis, buscado->est);
+        }
+
+            break;
+        
         case 't':
             if(tree == NULL){
                 printf("Arvore vazia\n");
