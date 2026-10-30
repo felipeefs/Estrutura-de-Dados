@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct no{
     long fb;
@@ -209,8 +210,8 @@ void atualizar(no *tree, long x ,char *vis, char *est){
         return;
 
     if(tree->id == x){
-        tree->vis = vis;
-        tree->est = est;
+        strcpy(tree->vis, vis);
+        strcpy(tree->est, est);
         return;
     }
     else if(x > tree->id)
@@ -231,7 +232,7 @@ no *buscar(no *tree, long x){
     else if(x > tree->id){
         return buscar(tree->right, x);
     }
-    else if(x < tree->id){
+    else{
         return buscar(tree->left, x);
     }
 }
@@ -252,16 +253,15 @@ void ocorrencia_doEstado(no *tree, long *obs, long *des, long *atu){
         return;
     }
     
-    if(tree->est == "obsoleto")
-        obs++;
-    else if(tree->est == "desatualizado")
-        des ++;
-    else if(tree->est == "atualizado")
-        atu++;
+    if(strcmp(tree->est,"obsoleto") == 0)
+        (*obs)++;
+    else if(strcmp(tree->est,"desatualizado") == 0)
+        (*des)++;
+    else if(strcmp(tree->est,"atualizado") == 0)
+        (*atu)++;
 
     ocorrencia_doEstado(tree->left, obs, des, atu);
     ocorrencia_doEstado(tree->right, obs, des, atu);
-    
 }
 
 int main(){
@@ -298,6 +298,8 @@ int main(){
             scanf("%ld %20s %20s",&x, vis, est);
             
             atualizar(tree, x, vis, est);
+            free(vis);
+            free(est);
         }
             break;
 
@@ -310,14 +312,20 @@ int main(){
                 printf("%ld nao existe\n", x);
             }
             else
-                printf("%ld, %s, %s", x, buscado->vis, buscado->est);
+                printf("%ld, %s, %s\n", x, buscado->vis, buscado->est);
         }
             break;
 
         case 'l':{
-            printf("documentos:");
-            printar_crescente(tree);
-            printf("\n");
+            if(tree == NULL){
+                printf("indice vazio\n");
+                break;
+            }
+            else{
+                printf("documentos:");
+                printar_crescente(tree);
+                printf("\n");
+            }
         }
             break;
 
@@ -326,6 +334,7 @@ int main(){
             ocorrencia_doEstado(tree, &obs, &des, &atu);
             printf("atualizado: %ld, desatualizado: %ld, obsoleto: %ld\n", atu, des, obs);
         }
+            break;
         
         // case 'k':
         //     if(tree == NULL){
