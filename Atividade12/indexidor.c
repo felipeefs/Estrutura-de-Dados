@@ -11,7 +11,7 @@ typedef struct no{
     struct no *parent;
 }no;
 
-void rotacao_direita(no *x){
+no *rotacao_direita(no *x){
     //Faz uma rotação para a direita da sub-árvore
     no *y = x->left;
     x->left = y->right;
@@ -30,9 +30,11 @@ void rotacao_direita(no *x){
 
     y->right = x;
     x->parent = y;
+
+    return y;
 }
 
-void rotacao_esquerda(no *x){
+no *rotacao_esquerda(no *x){
     //Faz uma rotação a esquerda da sub-árvore
     no *y = x->right;
     x->right = y->left;
@@ -51,21 +53,43 @@ void rotacao_esquerda(no *x){
 
     y->left = x;
     x->parent = y;
+
+    return y; //Retorna a nova raiz
 }
 
 
-void balancear_AVL(no *x, long fb){
+no *balancear_AVL(no *x, long fb){
     //Analise se precisa de balanceamento na direita ou esquerda, e seu devido caso, e balanceia a árvore
     if(fb == 2){
         no *filho = x->left;
         if(filho->fb >= 0){
             //Caso LL
-            rotacao_direita(x);
+            x = rotacao_direita(x);
+
+            x->fb = 0; //Depois da rotação, atualiza os valores de fb
+            x->right->fb = 0;
         }
         else{
             //Caso LR
-            rotacao_esquerda(x->left);
-            rotacao_direita(x);
+            long fb_z = x->right->left->fb; //Guaurda o fb da futura nova raiz
+            x->left = rotacao_esquerda(x->left);
+            x = rotacao_direita(x);
+
+            if(fb_z == 0){
+                x->fb = 0;
+                x->right->fb = 0;
+                x->left->fb = 0;
+            }
+            else if(fb_z == 1){
+                x->right->fb = 0;
+                x->left->fb = -1;
+            }
+            else if(fb_z == -1){
+                x->fb = 0;
+                x->right->fb = 0;
+                x->right->fb = 1;
+            }
+
         }
     }
 
@@ -73,19 +97,22 @@ void balancear_AVL(no *x, long fb){
         no *filho = x->right;
         if(filho->fb <= 0){
             //Faz rotação RR
-            rotacao_esquerda(x);
+            x = rotacao_esquerda(x);
+
+            x->fb = 0; //Depois da rotação, atualiza os valores de fb
+            x->left->fb = 0;
         }
         else{
             //Caso RL
-            rotacao_direita(x->right);
-            rotacao_esquerda(x);
+            x->right = rotacao_direita(x->right);
+            x = rotacao_esquerda(x);
         }
     }
 
+    return x;
 }
 
-
-void atualizar_fb(no *novo){
+void atualizar_fb(no *novo, no **tree){
     //A partir do nó inserido, sobe toda a sub-árvore atualizando os fatores "fb"
     no *filho = novo;
     no *p = novo->parent;
@@ -96,7 +123,10 @@ void atualizar_fb(no *novo){
             if(p->fb == 0)
                 break;
             else if(p->fb == 2 || p->fb == -2){
-                balancear_AVL(p, p->fb);
+                no *nova_raiz = balancear_AVL(p, p->fb); //Atualiza a nova raiz
+                if(nova_raiz == NULL)
+                    *tree = nova_raiz;
+
                 break;
             }
         }
@@ -104,18 +134,20 @@ void atualizar_fb(no *novo){
             p->fb --;
             if(p->fb == 0)
                 break;
-            else if(p->fb == 2 || p->fb == -2){
-                balancear_AVL(p, p->fb);
+            else if(p->fb == 2 || p->fb == -2){ 
+                no *nova_raiz  = balancear_AVL(p, p->fb); //Atuliza a nova raiz
+                if(nova_raiz == NULL)
+                    *tree = nova_raiz;
+
                 break;
         }
     }
-
         filho = p;
         p = p->parent;
     }
 }
 
-no *inserir(no *tree, long x ,char *vis, char *est){
+no *inserir(no *tree, long x ,char *vis, char *est, no **inserido){
     if(tree == NULL){ //Se é igual a NULL se torna a raiz
         no *novo = malloc(sizeof(no));
 
@@ -130,17 +162,18 @@ no *inserir(no *tree, long x ,char *vis, char *est){
         novo->left = NULL;
         novo->right = NULL;
 
+        *inserido = novo;
         return novo;
     }
 
     if(x < tree->id){
-        tree->left = inserir(tree->left, x, vis, est);
+        tree->left = inserir(tree->left, x, vis, est, inserido);
 
         if(tree->left != NULL)
             tree->left->parent = tree; //Faz a conexão do novo nó com um pai
     }
     else if(x > tree->id){
-        tree->right = inserir(tree->right, x, vis, est);
+        tree->right = inserir(tree->right, x, vis, est, inserido);
 
         if(tree->right != NULL)
             tree->right->parent = tree;
@@ -164,14 +197,17 @@ int main(){
             char *vis = malloc(100 * sizeof(char));
             char *est = malloc(100 * sizeof(char));
             scanf("%ld %s %s",&x, vis, est);
-            tree = inserir(tree, x, vis, est);
+            
+            no* novo = NULL;
+            tree = inserir(tree, x, vis, est, &novo);
+
+            if(novo!= NULL)
+                atualizar_fb(novo, &tree);
             break;
         
         default:
             break;
         }
-        
-        
     }
     
 }
