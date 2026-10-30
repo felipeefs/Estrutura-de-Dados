@@ -220,7 +220,7 @@ void atualizar(no *tree, long x ,char *vis, char *est){
 }
 
 no *buscar(no *tree, long x){
-    
+    //Busca um nó x especifico
     if(tree == NULL){
         return NULL;
     }
@@ -234,7 +234,16 @@ no *buscar(no *tree, long x){
     else if(x < tree->id){
         return buscar(tree->left, x);
     }
-    //Retorna o nó encontrado
+}
+
+void printar_crescente(no *tree){
+    //Utiliza-se um algoritmo de busca em-ordem para printar toda a árvore em ordem crescente
+    if(tree == NULL)
+        return;
+
+    printar_crescente(tree->left);
+    printf(" %ld", tree->id);
+    printar_crescente(tree->right);
 }
 
 int main(){
@@ -269,7 +278,7 @@ int main(){
             char *vis = malloc(100 * sizeof(char));
             char *est = malloc(100 * sizeof(char));
             scanf("%ld %20s %20s",&x, vis, est);
-
+            
             atualizar(tree, x, vis, est);
         }
 
@@ -286,8 +295,14 @@ int main(){
             else
                 printf("%ld, %s, %s", x, buscado->vis, buscado->est);
         }
-
             break;
+
+        case 'l':{
+            printf("documentos:");
+            printar_crescente(tree);
+            printf("\n");
+        }
+        break;
         
         case 't':
             if(tree == NULL){
