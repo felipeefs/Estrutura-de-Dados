@@ -19,7 +19,7 @@ no *buscar(no *tree, int x, int *pos){
     }
 
     if(i<tree->n && x == tree->chaves[i]){
-        *pos = x;
+        (*pos) = i;
         return tree;
     }
     
@@ -237,6 +237,8 @@ int main(){
                 if(achado!=NULL){
                     printf("%d: %ld %ld", x, achado->ini[pos], achado->fim[pos]);
                 }
+                else   
+                    printf("%d nao esta na arvore", x);
             }
             break;
         }
