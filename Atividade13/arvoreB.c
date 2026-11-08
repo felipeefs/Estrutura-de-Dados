@@ -124,14 +124,12 @@ void inserir_nao_cheio(no *x, int k, long ini, long fim){
     }
 
     else{
-
-        // Descobre qual filho deve receber a chave
+        //Descobre qual filho deve receber a chave
         while(i >= 0 && k < x->chaves[i])
             i--;
-
         i++;
 
-        // Se o filho estiver cheio, divide
+        //Se o filho estiver cheio, divide
         if(x->filhos[i]->n == 2*x->t-1){
 
             dividir_filho(x, i);
@@ -161,12 +159,10 @@ void inserir(int x, long ini, long fim, no **tree, int t){
 
     // Verifica se a raiz está cheia
     if(r->n == 2*t-1){
-
         // Cria uma nova raiz
         no *s = criar_no(t, 0);
         if(s == NULL)
             return;
-
         s->filhos[0] = r;
 
         // Atualiza a raiz
@@ -174,9 +170,7 @@ void inserir(int x, long ini, long fim, no **tree, int t){
 
         // Divide a raiz antiga
         dividir_filho(s, 0);
-
         int i = 0;
-
         if(x > s->chaves[0])
             i++;
 
@@ -204,6 +198,75 @@ void limpar_arvore(no *tree){
     free(tree->ini);
     free(tree);
 }
+
+void imprimir_largura(no *tree){
+    if(tree == NULL){
+        printf("A arvore esta vazia.\n");
+        return;
+    }
+    // fila de ponteiros para nó
+    int cap = 16, ini = 0, fim = 0;
+    no **fila = malloc(cap * sizeof(no*));
+    if(fila == NULL)
+        return;
+
+    fila[fim++] = tree;
+    int nivel = 0;
+    while(ini < fim){
+        int tam_nivel = fim - ini;//descobre quantos nós tem neste nível
+        printf("nivel %d: ", nivel);
+
+        for(int k = 0; k < tam_nivel; k++){
+            no *atual = fila[ini++];
+
+            //imprime as chaves do nó
+            printf("[");
+            for(int i = 0; i < atual->n; i++){
+                printf("%d", atual->chaves[i]);
+                if(i < atual->n - 1)
+                    printf(",");
+            }
+            printf("] ");
+
+            //enfileira os filhos
+            if(!atual->folha){
+                for(int i = 0; i <= atual->n; i++){
+                    if(fim == cap){
+                        cap *= 2;
+                        no **tmp = realloc(fila, cap * sizeof(no*));
+                        if(tmp == NULL){
+                            free(fila);
+                            return;
+                        }
+                        fila = tmp;
+                    }
+                    fila[fim++] = atual->filhos[i];
+                }
+            }
+        }
+        printf("\n");//fim do nível
+        nivel++;
+    }
+    free(fila);
+}
+
+void imprimir_emOrdem(no *tree){
+    //Algoritmo em ordem para imprimir as chaves de maneira crescente
+    if(tree == NULL){
+        printf("A arvore esta vazia.");
+        return;
+    }
+    
+    for(int i = 0; i < tree->n; i++){
+        if(!tree->folha)
+            imprimir_emOrdem(tree->filhos[i]);
+        printf("%d ", tree->chaves[i]);
+    }
+
+    if(!tree->folha)
+        imprimir_emOrdem(tree->filhos[tree->n]); // tudo maior que a última chave
+}
+
 
 int main(){
     char operacao;
@@ -235,10 +298,22 @@ int main(){
                 int pos;
                 no *achado = buscar(tree, x, &pos);
                 if(achado!=NULL){
-                    printf("%d: %ld %ld", x, achado->ini[pos], achado->fim[pos]);
+                    printf("%d: %ld %ld\n", x, achado->ini[pos], achado->fim[pos]);
                 }
                 else   
-                    printf("%d nao esta na arvore", x);
+                    printf("%d nao esta na arvore\n", x);
+            }
+            break;
+
+            case 'p':{
+                imprimir_largura(tree);
+            }
+            break;
+
+            case 'l':{
+                imprimir_emOrdem(tree);
+                printf("\n");
+
             }
             break;
         }
