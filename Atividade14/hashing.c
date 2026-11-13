@@ -27,7 +27,7 @@ void criar_T(tabela *T, int n){
     }
 }
 
-void inserir(tabela *T, int chave, long valor, int n){
+void inserir_chave(tabela *T, int chave, long valor, int n){
     int pos = h1(chave, n);
     int guarda_chave;
     long guarda_valor;
@@ -37,13 +37,14 @@ void inserir(tabela *T, int chave, long valor, int n){
         int ind = pos + (i * h2(chave, n)) % n;
         if(T[ind].chave == chave){ //Chave já existe
             T[ind].chave == chave;
+            return;
         }
         else if(T[ind].chave == REMOVIDO){
             if(rem == -1){
-                rem = ind;
+                rem = ind; //Guarda o ind da primeira posição removida, para inserir_chave nela depois
             }
         }
-        else if(T[ind].chave == VAZIO){ //
+        else if(T[ind].chave == VAZIO){ 
             if(rem != -1){
                 ind = rem;
             }
@@ -56,7 +57,8 @@ void inserir(tabela *T, int chave, long valor, int n){
             guarda_valor = T[ind].valor;
             T[ind].chave = chave;
             T[ind].valor = valor;
-            inserir(T, guarda_chave, guarda_valor, n);
+            inserir_chave(T, guarda_chave, guarda_valor, n);
+            return;
         }
     }
     if(rem != -1){ //Quando há uma possivel removida e não teve proximas posições vazias
@@ -66,14 +68,27 @@ void inserir(tabela *T, int chave, long valor, int n){
     return;
 }
 
+void remover_chave(tabela *T, int chave, int n){
+    int pos = h1(chave, n);
+
+    for(int i = 0; i< n; i++){
+        int ind = pos + (i * h2(chave, n)) % n;
+        if(T[ind].chave == chave){
+            T[ind].chave = REMOVIDO;
+            T[ind].valor = REMOVIDO;
+            return;
+        }
+    }
+    return;
+}
+
 int main(){
     tabela *T = NULL;
     char operacao;
-
+    int n;
     while(scanf(" %c", &operacao) == 1){
         switch (operacao){
         case 'c':{
-            int n;
             scanf("%d", &n);
             if(T != NULL){
                 free(T);
@@ -86,8 +101,21 @@ int main(){
             int chave;
             long valor;
             scanf("%d %ld", &chave, &valor);
+            inserir_chave(T, chave, valor, n);
         }
             break;
+        
+        case 'r':{
+            int chave;
+            scanf("%d", &chave);
+            remover_chave(T, chave, n);
+        }
+            break;
+
+        case 'b':{
+            int chave;
+            scanf("%d", &chave);
+        }
 
         default:
             break;
