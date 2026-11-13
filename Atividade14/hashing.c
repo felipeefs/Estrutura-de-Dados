@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define VAZIO -1
 #define REMOVIDO -2
@@ -19,12 +20,14 @@ int h2(int chave, int n){
     return 1 + (chave % n);
 }
 
-void criar_T(tabela *T, int n){
+tabela *criar_T(int n){
     //Cria uma tabela vazia
-    T = malloc(n * sizeof(tabela));
+    tabela *T = malloc(n * sizeof(tabela));
     for(int i = 0; i<n; i++){
         T[i].chave = VAZIO;
+        T[i].valor = VAZIO;
     }
+    return T;
 }
 
 void inserir_chave(tabela *T, int chave, long valor, int n){
@@ -34,9 +37,9 @@ void inserir_chave(tabela *T, int chave, long valor, int n){
     int rem = -1;
 
     for(int i = 0; i< n; i++){
-        int ind = pos + (i * h2(chave, n)) % n;
+        int ind = (pos + i * h2(chave, n)) % n;
         if(T[ind].chave == chave){ //Chave já existe
-            T[ind].chave == chave;
+            T[ind].chave = chave;
             return;
         }
         else if(T[ind].chave == REMOVIDO){
@@ -72,7 +75,7 @@ void remover_chave(tabela *T, int chave, int n){
     int pos = h1(chave, n);
 
     for(int i = 0; i < n; i++){
-        int ind = pos + (i * h2(chave, n)) % n;
+        int ind = (pos + i * h2(chave, n)) % n;
         if(T[ind].chave == chave){
             T[ind].chave = REMOVIDO;
             T[ind].valor = REMOVIDO;
@@ -86,7 +89,7 @@ int buscar_chave(tabela *T, int chave, int n){
     int pos = h1(chave, n);
 
     for(int i = 0; i < n; i++){
-        int ind = pos + (i * h2(chave, n)) % n;
+        int ind = (pos + i * h2(chave, n)) % n;
         if(T[ind].chave == chave)
             return ind;
         else if(T[ind].chave == VAZIO)
@@ -100,13 +103,18 @@ int main(){
     char operacao;
     int n;
     while(scanf(" %c", &operacao) == 1){
+
+        if(operacao == 'f'){
+            break;
+        }
+
         switch (operacao){
         case 'c':{
             scanf("%d", &n);
             if(T != NULL){
                 free(T);
             }
-            criar_T(T, n);            
+            T = criar_T(n);            
         }
             break;
         
@@ -128,7 +136,15 @@ int main(){
         case 'b':{
             int chave;
             scanf("%d", &chave);
+            if(buscar_chave(T, chave, n) != -1){
+                int ind = buscar_chave(T, chave, n);
+                printf("%d -> %ld\n", T[ind].chave, T[ind].valor);
+            }
+            else{
+                printf("%d -> !E\n", chave);
+            }
         }
+            break;
 
         default:
             break;
