@@ -71,7 +71,7 @@ void inserir_chave(tabela *T, int chave, long valor, int n){
 void remover_chave(tabela *T, int chave, int n){
     int pos = h1(chave, n);
 
-    for(int i = 0; i< n; i++){
+    for(int i = 0; i < n; i++){
         int ind = pos + (i * h2(chave, n)) % n;
         if(T[ind].chave == chave){
             T[ind].chave = REMOVIDO;
@@ -80,6 +80,19 @@ void remover_chave(tabela *T, int chave, int n){
         }
     }
     return;
+}
+
+int buscar_chave(tabela *T, int chave, int n){
+    int pos = h1(chave, n);
+
+    for(int i = 0; i < n; i++){
+        int ind = pos + (i * h2(chave, n)) % n;
+        if(T[ind].chave == chave)
+            return ind;
+        else if(T[ind].chave == VAZIO)
+            return -1; //Retorna -1 se não achou a chave
+    }
+    return -1;
 }
 
 int main(){
